@@ -1,0 +1,7 @@
+# Copy this file to terraform.tfvars and update the values
+
+aws_region   = "us-east-1"
+bucket_name  = "awsugmys-website-unique-suffix"  # Must be globally unique
+domain_name  = "awsugmys.in"
+environment  = "production"
+project_name = "awsugmys-website"
