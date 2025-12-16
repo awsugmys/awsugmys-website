@@ -8,6 +8,8 @@ Official Website of AWS User Group Mysuru community
 
 This is the official website for AWS User Group Mysuru, a community of passionate AWS developers, solution architects, DevOps engineers, and cloud enthusiasts in Mysuru, Karnataka, India.
 
+🌐 **Live Website**: [awsugmys.in](https://awsugmys.in)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -120,7 +122,7 @@ The website automatically deploys when you push to the `main` branch:
 1. GitHub Actions builds the site
 2. Deploys to S3
 3. Invalidates CloudFront cache
-4. Site is live at your CloudFront URL
+4. Site is live at [awsugmys.in](https://awsugmys.in)
 
 ## 📁 Project Structure
 

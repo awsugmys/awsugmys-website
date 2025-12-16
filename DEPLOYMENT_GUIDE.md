@@ -83,19 +83,19 @@ CLOUDFRONT_DISTRIBUTION_ID: <from_terraform_output>
 
 ### Custom Domain Setup
 
-To use a custom domain:
+The website is configured to support custom domains with SSL certificates. For awsugmys.in:
 
-1. **Purchase domain** through Route 53 or external registrar
-2. **Request SSL certificate** in AWS Certificate Manager
-3. **Update Terraform configuration**:
+1. **Domain Configuration**: Already configured for `awsugmys.in`
+2. **SSL Certificate**: Using ACM certificate `2084e1e8-2e42-4843-b6ae-ad550a234d94`
+3. **Terraform Variables**: Update `terraform.tfvars`:
    ```hcl
-   # Add to main.tf
-   viewer_certificate {
-     acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
-     ssl_support_method  = "sni-only"
-   }
+   use_custom_domain = true
+   domain_name       = "awsugmys.in"
+   certificate_arn   = "arn:aws:acm:us-east-1:YOUR_ACCOUNT:certificate/2084e1e8-2e42-4843-b6ae-ad550a234d94"
    ```
-4. **Create Route 53 records** pointing to CloudFront
+4. **DNS Configuration**: Create ALIAS record pointing to CloudFront distribution
+
+**Current Status**: ✅ Custom domain `awsugmys.in` is active and working
 
 ### Environment-Specific Deployments
 
@@ -221,10 +221,10 @@ For help with deployment:
 After successful deployment:
 
 1. **Content Management**: Set up Netlify CMS at `/admin`
-2. **Custom Domain**: Configure your domain name
-3. **SEO Optimization**: Add meta tags and sitemap
-4. **Social Media**: Update social media links
-5. **Community**: Start planning your first meetup!
+2. **SEO Optimization**: Add meta tags and sitemap
+3. **Social Media**: Update social media links
+4. **Community**: Start planning your first meetup!
+5. **Analytics**: Set up Google Analytics for visitor tracking
 
 ---
 
