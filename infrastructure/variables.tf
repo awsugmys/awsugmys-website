@@ -16,6 +16,18 @@ variable "domain_name" {
   default     = "awsugmys.in"
 }
 
+variable "certificate_arn" {
+  description = "ACM certificate ARN for the custom domain (optional)"
+  type        = string
+  default     = ""
+}
+
+variable "use_custom_domain" {
+  description = "Whether to use a custom domain with SSL certificate"
+  type        = bool
+  default     = false
+}
+
 variable "environment" {
   description = "Environment name"
   type        = string

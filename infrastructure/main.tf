@@ -94,6 +94,9 @@ resource "aws_cloudfront_distribution" "website_distribution" {
   is_ipv6_enabled     = true
   comment             = "AWS User Group Mysuru Website"
   default_root_object = "index.html"
+  
+  # Add custom domain aliases if using custom domain
+  aliases = var.use_custom_domain ? [var.domain_name, "www.${var.domain_name}"] : []
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -139,8 +142,12 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     Environment = var.environment
   }
 
+  # Use custom certificate if provided, otherwise use CloudFront default
   viewer_certificate {
-    cloudfront_default_certificate = true
+    cloudfront_default_certificate = var.use_custom_domain ? false : true
+    acm_certificate_arn            = var.use_custom_domain ? var.certificate_arn : null
+    ssl_support_method             = var.use_custom_domain ? "sni-only" : null
+    minimum_protocol_version       = var.use_custom_domain ? "TLSv1.2_2021" : null
   }
 }
 
