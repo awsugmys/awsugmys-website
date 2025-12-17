@@ -1,7 +1,7 @@
 ---
 templateKey: blog-post
 title: Welcome to AWS User Group Mysuru!
-date: 2024-12-16T10:00:00.000Z
+date: 2025-12-16T10:00:00.000Z
 description: >-
   We're excited to launch the AWS User Group Mysuru community! Join us as we
   build a vibrant community of AWS enthusiasts in Mysuru.
