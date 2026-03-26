@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import github from '../img/github-icon.svg'
-import logo from '../img/awsugmys-logo.png'
+import logo from '../../logos/White-Purple-Mascot.png'
 
 const Navbar = () => (
   <nav className="navbar is-transparent">
