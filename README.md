@@ -1,8 +1,7 @@
 # AWS User Group Mysuru Website
 
 Official Website of AWS User Group Mysuru:
-
-![AWS User Group Mysuru](static/img/awsugmys-logo.png)
+<img width="3000" height="3000" alt="AWS-White" src="https://github.com/user-attachments/assets/f3b2882f-7848-4e68-8708-ecda70dce059" />
 
 ## 🌟 About
 
