@@ -4,7 +4,7 @@ path: /about
 title: About us
 ---
 
-![awsugmys](/img/awsugmys-cover.jpg)
+![awsugmys](/img/White-Purple-Mascot.png)
 
 <br> <br>
 
