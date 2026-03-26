@@ -16,12 +16,22 @@ tags:
   - inaugural
 ---
 
-We are excited to announce the launch of AWS User Group Mysuru, bringing together cloud professionals, developers, and technology enthusiasts from across the region.
+We are excited to announce the launch of **AWS User Group Mysuru**, bringing together cloud professionals, developers, and technology enthusiasts from across the region.
 
-📅 Date: March 27, 2026
-⏰ Time: 10 AM
-📍 Venue: VVCE, Mysuru
+---
 
-[Register here](https://lnkd.in/gDFGhWBX)
+📅 **Date:** March 27, 2026
 
-This inaugural meetup will bring together industry professionals, community builders, and learners to discuss cloud technologies, including AWS, DevOps, and AI. The event is free and open to professionals, students, and technology enthusiasts. Join us as we build the AWS community in Mysuru.
+⏰ **Time:** 10 AM
+
+📍 **Venue:** VVCE, Mysuru
+
+---
+
+This inaugural meetup will bring together industry professionals, community builders, and learners to discuss cloud technologies — including AWS, DevOps, and AI.
+
+The event is **free** and open to professionals, students, and technology enthusiasts alike.
+
+👉 [Register here](https://www.meetup.com/awsugmys/events/313709004/)
+
+Join us as we build the AWS community in Mysuru!
