@@ -1,6 +1,6 @@
 # AWS User Group Mysuru Website
 
-Official Website of AWS User Group Mysuru community
+Official Website of AWS User Group Mysuru:
 
 ![AWS User Group Mysuru](static/img/awsugmys-logo.png)
 
