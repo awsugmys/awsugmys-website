@@ -4,7 +4,9 @@ path: /about
 title: About us
 ---
 
-![awsugmys](/img/White-Purple-Mascot.png)
+<div style="text-align: center; margin: 1.5rem 0;">
+  <img src="/img/White-Purple-Mascot.png" alt="AWS User Group Mysuru" style="width: 180px; height: auto;" />
+</div>
 
 <br> <br>
 
@@ -36,6 +38,15 @@ All skills levels including students who would like to learn about AWS are welco
   AWS User Group Mysuru (Co-Organiser)
 
 - [Aniruddh Koundinya](https://www.linkedin.com/in/aniruddhkoundinya/) -
+  AWS User Group Mysuru (Co-Organiser)
+
+- [Sanjay NS](https://www.linkedin.com/in/sanjay-ns/) -
+  AWS User Group Mysuru (Co-Organiser)
+
+- [Sahana S R](https://www.linkedin.com/in/sahana-sr-2119361a4/) -
+  AWS User Group Mysuru (Co-Organiser)
+
+- [Suhruth M V Jamadagni](https://www.linkedin.com/in/suhruth-m-v-jamadagni-448632198/) -
   AWS User Group Mysuru (Co-Organiser)
 
 ### Contact
