@@ -6,13 +6,6 @@ import Layout from '../components/Layout'
 class TagRoute extends React.Component {
   render() {
     const posts = this.props.data.allMarkdownRemark.edges
-    const postLinks = posts.map(post => (
-      <li key={post.node.fields.slug}>
-        <Link to={post.node.fields.slug}>
-          <h2 className="is-size-2">{post.node.frontmatter.title}</h2>
-        </Link>
-      </li>
-    ))
     const tag = this.props.pageContext.tag
     const title = this.props.data.site.siteMetadata.title
     const totalCount = this.props.data.allMarkdownRemark.totalCount
@@ -22,19 +15,54 @@ class TagRoute extends React.Component {
 
     return (
       <Layout>
-        <section className="section">
-          <Helmet title={`${tag} | ${title}`} />
-          <div className="container content">
-            <div className="columns">
-              <div
-                className="column is-10 is-offset-1"
-                style={{ marginBottom: '6rem' }}
-              >
-                <h3 className="title is-size-4 is-bold-light">{tagHeader}</h3>
-                <ul className="taglist">{postLinks}</ul>
-                <p>
-                  <Link to="/tags/">Browse all tags</Link>
-                </p>
+        <Helmet title={`${tag} | ${title}`} />
+
+        {/* Page Banner */}
+        <div className="page-banner">
+          <h1 className="page-banner-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            <span style={{ color: '#FF9900' }}>#</span>{tag}
+          </h1>
+          <p className="page-banner-subtitle">{tagHeader}</p>
+        </div>
+
+        {/* Post List */}
+        <section className="section" style={{ paddingBottom: '4rem' }}>
+          <div className="container">
+            <div className="columns is-centered">
+              <div className="column is-8">
+
+                  {posts.map((post, index) => (
+                    <Link
+                      key={post.node.fields.slug}
+                      to={post.node.fields.slug}
+                      style={{
+                        display: 'block',
+                        padding: '1.25rem 0',
+                        borderBottom: index < posts.length - 1 ? '1px solid #f0f0f0' : 'none',
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
+                        color: '#232F3E',
+                        textDecoration: 'none',
+                        transition: 'color 0.2s ease, padding-left 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#FF9900'
+                        e.currentTarget.style.paddingLeft = '0.5rem'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#232F3E'
+                        e.currentTarget.style.paddingLeft = '0'
+                      }}
+                    >
+                      {post.node.frontmatter.title}
+                    </Link>
+                  ))}
+
+                  <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid #eee' }}>
+                    <Link to="/tags/" className="tag-pill">
+                      ← Browse all topics
+                    </Link>
+                  </div>
               </div>
             </div>
           </div>

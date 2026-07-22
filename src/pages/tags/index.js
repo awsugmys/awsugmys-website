@@ -3,6 +3,7 @@ import { kebabCase } from 'lodash'
 import { Helmet } from 'react-helmet'
 import { Link, graphql } from 'gatsby'
 import Layout from '../../components/Layout'
+import { IconHash } from '../../components/Icons'
 
 const TagsPage = ({
   data: {
@@ -11,36 +12,48 @@ const TagsPage = ({
       siteMetadata: { title },
     },
   },
-}) => (
-  <Layout>
-    <section className="section">
-      <Helmet title={`Tags | ${title}`} />
-      <div className="container content">
-        <div className="columns">
-          <div
-            className="column is-10 is-offset-1"
-            style={{ marginBottom: '6rem' }}
-          >
-            <h1 className="title is-size-2 is-bold-light">Tags</h1>
-            <ul className="taglist">
-              {group.map(tag => (
-                <li key={tag.fieldValue}>
-                  <Link to={`/tags/${kebabCase(tag.fieldValue)}/`}>
-                    {tag.fieldValue} ({tag.totalCount})
+}) => {
+  const sortedTags = [...group].sort((a, b) => b.totalCount - a.totalCount)
+
+  return (
+    <Layout>
+      <Helmet title={`Topics | ${title}`} />
+
+      {/* Page Banner */}
+      <div className="page-banner">
+        <h1 className="page-banner-title">Topics</h1>
+        <p className="page-banner-subtitle">Browse all {group.length} topics covered by AWS UG Mysuru</p>
+      </div>
+
+      {/* Topic Grid */}
+      <section className="section section-light">
+        <div className="container">
+          <div className="columns is-centered">
+            <div className="column is-10">
+              <div className="topic-grid">
+                {sortedTags.map((tag) => (
+                  <Link
+                    className="topic-card"
+                    to={`/tags/${kebabCase(tag.fieldValue)}/`}
+                    key={tag.fieldValue}
+                  >
+                    <span className="topic-card-icon"><IconHash /></span>
+                    <span className="topic-card-name">{tag.fieldValue}</span>
+                    <span className="topic-card-count">{tag.totalCount} post{tag.totalCount === 1 ? '' : 's'}</span>
                   </Link>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  </Layout>
-)
+      </section>
+    </Layout>
+  )
+}
 
 export default TagsPage
 
-export const tagPageQuery = graphql`
+export const pageQuery = graphql`
   query TagsQuery {
     site {
       siteMetadata {

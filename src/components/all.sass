@@ -1,17 +1,845 @@
 @import "~bulma/sass/utilities/initial-variables"
 
-// Config vars
-// Kaldi logo brand color: #FD461E
-$kaldi-red: #D64000
-$kaldi-red-invert: #fff
+// =============================================
+// AWS Brand Design System v2.0
+// Senior-grade polish pass
+// =============================================
+$aws-navy: #232F3E
+$aws-navy-dark: #1a2332
+$aws-navy-mid: #2a3a4e
+$aws-orange: #FF9900
+$aws-orange-hover: #e68a00
+$aws-orange-light: #FFB84D
+$aws-blue: #007EB9
+$aws-light: #F7F8F8
+$aws-white: #fff
 
-$primary: $kaldi-red
-$primary-invert: $kaldi-red-invert
-$body-color: #333
-$black: #2b2523
+// Bulma overrides
+$primary: $aws-orange
+$primary-invert: $aws-white
+$body-color: #3d4852
+$black: $aws-navy
+$link: $aws-blue
+$link-hover: $aws-orange
+$family-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif
+$body-line-height: 1.7
+$section-padding: 5rem 1.5rem
 
-.navbar .navbar-menu
-  box-shadow: none !important
+// =============================================
+// Global Polish
+// =============================================
+html
+  scroll-behavior: smooth
+
+body
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  text-rendering: optimizeLegibility
+
+*
+  box-sizing: border-box
+
+// =============================================
+// Navbar
+// =============================================
+.navbar.aws-navbar
+  background-color: $aws-navy
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2)
+  border-bottom: 3px solid $aws-orange
+  min-height: 3.5rem
+  .navbar-menu
+    box-shadow: none !important
+  .navbar-item
+    color: rgba(255, 255, 255, 0.85)
+    font-weight: 500
+    font-size: 0.95rem
+    letter-spacing: 0.01em
+    padding: 0.5rem 1rem
+    transition: color 0.2s ease, background-color 0.2s ease
+    &:hover, &:focus, &.is-active
+      color: $aws-orange
+      background-color: rgba(255, 255, 255, 0.06)
+  .navbar-burger
+    color: white
+    &:hover
+      color: $aws-orange
+      background-color: transparent
+  @media screen and (max-width: 1023px)
+    .navbar-menu
+      background-color: $aws-navy-dark
+      padding: 0.75rem 0
+      border-top: 1px solid rgba(255, 255, 255, 0.08)
+      &.is-active
+        display: block
+
+// =============================================
+// Page Banner (reusable header for subpages)
+// =============================================
+.page-banner
+  background: linear-gradient(135deg, $aws-navy 0%, $aws-navy-dark 100%)
+  padding: 5rem 1.5rem 4.5rem
+  text-align: center
+  position: relative
+  overflow: hidden
+  // Decorative geometric circles
+  &::before
+    content: ''
+    position: absolute
+    top: -80px
+    right: -60px
+    width: 300px
+    height: 300px
+    border-radius: 50%
+    border: 40px solid rgba($aws-orange, 0.04)
+    pointer-events: none
+  &::after
+    content: ''
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    height: 4px
+    background: linear-gradient(90deg, $aws-orange, $aws-blue, $aws-orange)
+  .page-banner-title
+    color: $aws-white
+    font-size: 2.75rem
+    font-weight: 800
+    letter-spacing: -0.025em
+    position: relative
+    z-index: 1
+  .page-banner-subtitle
+    color: rgba(255, 255, 255, 0.6)
+    font-size: 1.1rem
+    margin-top: 0.75rem
+    position: relative
+    z-index: 1
+    max-width: 500px
+    margin-left: auto
+    margin-right: auto
+
+// =============================================
+// Hero Section
+// =============================================
+.hero-aws
+  background: linear-gradient(160deg, $aws-navy 0%, #1B2A4A 50%, $aws-navy-dark 100%)
+  position: relative
+  overflow: hidden
+  &::before
+    content: ''
+    position: absolute
+    top: -40%
+    right: -15%
+    width: 700px
+    height: 700px
+    border-radius: 50%
+    background: radial-gradient(circle, rgba($aws-orange, 0.06) 0%, transparent 65%)
+    pointer-events: none
+  &::after
+    content: ''
+    position: absolute
+    bottom: -25%
+    left: -8%
+    width: 500px
+    height: 500px
+    border-radius: 50%
+    background: radial-gradient(circle, rgba($aws-blue, 0.05) 0%, transparent 65%)
+    pointer-events: none
+
+// Hero badge pill
+.hero-badge
+  display: inline-flex
+  align-items: center
+  gap: 0.4rem
+  background: rgba($aws-orange, 0.12)
+  color: $aws-orange
+  font-size: 0.8rem
+  font-weight: 700
+  padding: 0.45rem 1.15rem
+  border-radius: 24px
+  letter-spacing: 0.06em
+  margin-bottom: 1.75rem
+  border: 1px solid rgba($aws-orange, 0.25)
+  svg
+    width: 0.95rem
+    height: 0.95rem
+    flex-shrink: 0
+
+// Hero heading
+.hero-heading
+  color: $aws-white
+  font-size: 3.5rem
+  font-weight: 900
+  line-height: 1.12
+  letter-spacing: -0.03em
+  max-width: 720px
+  margin: 0 auto 1.75rem
+  .highlight
+    color: $aws-orange
+
+// Hero subtitle text
+.hero-subtitle-text
+  color: rgba(255, 255, 255, 0.65)
+  font-size: 1.15rem
+  max-width: 540px
+  margin: 0 auto 2.75rem
+  line-height: 1.75
+
+// Hero CTA buttons
+.hero-btn-primary
+  display: inline-flex
+  align-items: center
+  background-color: $aws-orange
+  color: $aws-navy !important
+  font-weight: 700
+  font-size: 1rem
+  border: none
+  border-radius: 8px
+  padding: 0.85em 2.25em
+  box-shadow: 0 4px 20px rgba($aws-orange, 0.35)
+  transition: all 0.25s ease
+  text-decoration: none
+  cursor: pointer
+  &:hover
+    background-color: $aws-orange-hover
+    transform: translateY(-2px)
+    box-shadow: 0 6px 24px rgba($aws-orange, 0.45)
+    color: $aws-navy !important
+
+.hero-btn-secondary
+  display: inline-flex
+  align-items: center
+  background-color: transparent
+  color: $aws-white !important
+  font-weight: 600
+  font-size: 1rem
+  border: 2px solid rgba(255, 255, 255, 0.25)
+  border-radius: 8px
+  padding: 0.85em 2.25em
+  transition: all 0.25s ease
+  text-decoration: none
+  cursor: pointer
+  &:hover
+    border-color: rgba(255, 255, 255, 0.5)
+    background-color: rgba(255, 255, 255, 0.06)
+    transform: translateY(-2px)
+    color: $aws-white !important
+  // Modifier for use on light/white backgrounds (e.g. 404 page)
+  &.is-dark
+    color: $aws-navy !important
+    border-color: rgba($aws-navy, 0.25)
+    &:hover
+      border-color: rgba($aws-navy, 0.5)
+      background-color: rgba($aws-navy, 0.05)
+      color: $aws-navy !important
+
+// =============================================
+// Stats Strip
+// =============================================
+.stats-strip
+  background-color: $aws-white
+  border-bottom: 1px solid #eaeaea
+  border-top: 1px solid #eaeaea
+  .stat-item
+    text-align: center
+    padding: 2.25rem 1rem
+    .stat-number
+      font-size: 2.75rem
+      font-weight: 900
+      color: $aws-navy
+      line-height: 1
+      letter-spacing: -0.02em
+    .stat-label
+      font-size: 0.78rem
+      color: #999
+      text-transform: uppercase
+      letter-spacing: 0.1em
+      margin-top: 0.5rem
+      font-weight: 600
+    // Divider between stats on desktop
+    @media screen and (min-width: 769px)
+      &:not(:last-child)
+        border-right: 1px solid #eaeaea
+
+// =============================================
+// Section Headings
+// =============================================
+.section-heading
+  font-size: 2.25rem
+  font-weight: 800
+  color: $aws-navy
+  letter-spacing: -0.02em
+
+.section-subheading
+  color: #999
+  max-width: 480px
+  margin: 0.6rem auto 0
+  font-size: 1rem
+  line-height: 1.6
+
+// =============================================
+// Pillar Cards
+// =============================================
+.pillar-card
+  background: $aws-white
+  border-radius: 16px
+  padding: 3rem 2rem 2.5rem
+  text-align: center
+  border: 1px solid #eee
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease
+  height: 100%
+  &:hover
+    transform: translateY(-8px)
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07)
+    border-color: rgba($aws-orange, 0.2)
+  .pillar-icon-wrap
+    width: 4.5rem
+    height: 4.5rem
+    display: flex
+    align-items: center
+    justify-content: center
+    margin: 0 auto 1.5rem
+    border-radius: 16px
+    background: rgba($aws-orange, 0.1)
+    color: $aws-orange
+    transition: background-color 0.3s ease, transform 0.3s ease
+    svg
+      width: 1.85rem
+      height: 1.85rem
+  &:hover .pillar-icon-wrap
+    background: rgba($aws-orange, 0.16)
+    transform: scale(1.05)
+  .pillar-title
+    font-size: 1.4rem
+    font-weight: 700
+    color: $aws-navy
+    margin-bottom: 0.85rem
+  .pillar-text
+    font-size: 0.95rem
+    color: #666
+    line-height: 1.75
+
+// =============================================
+// Blog / Event Cards
+// =============================================
+.event-card
+  background: $aws-white
+  border-radius: 12px
+  border: 1px solid #eee
+  border-left: 4px solid $aws-orange
+  overflow: hidden
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease
+  display: flex
+  flex-direction: column
+  height: 100%
+  &:hover
+    transform: translateY(-5px)
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08)
+    border-left-color: $aws-orange-hover
+  .event-card-body
+    padding: 2rem
+    flex-grow: 1
+  .event-card-date
+    font-size: 0.72rem
+    font-weight: 700
+    color: $aws-orange
+    text-transform: uppercase
+    letter-spacing: 0.12em
+    margin-bottom: 0.85rem
+  .event-card-title
+    font-size: 1.15rem
+    font-weight: 700
+    color: $aws-navy
+    line-height: 1.4
+    margin-bottom: 0.85rem
+    a
+      color: $aws-navy
+      text-decoration: none
+      transition: color 0.2s ease
+      &:hover
+        color: $aws-orange
+  .event-card-excerpt
+    font-size: 0.9rem
+    color: #777
+    line-height: 1.7
+  .event-card-footer
+    padding: 1rem 2rem
+    border-top: 1px solid #f0f0f0
+    background: #fafbfc
+    a
+      font-weight: 700
+      font-size: 0.85rem
+      color: $aws-orange
+      text-decoration: none
+      transition: all 0.2s ease
+      letter-spacing: 0.02em
+      &:hover
+        color: $aws-orange-hover
+        letter-spacing: 0.04em
+
+// =============================================
+// Tag Pills
+// =============================================
+.tag-pill
+  display: inline-block
+  background: rgba($aws-orange, 0.08)
+  color: $aws-navy
+  font-size: 0.82rem
+  font-weight: 600
+  padding: 0.4rem 1rem
+  border-radius: 24px
+  margin: 0.3rem
+  transition: all 0.25s ease
+  text-decoration: none !important
+  border: 1px solid rgba($aws-orange, 0.15)
+  &:hover
+    background: $aws-orange
+    color: $aws-white
+    border-color: $aws-orange
+    transform: translateY(-2px)
+    box-shadow: 0 4px 12px rgba($aws-orange, 0.25)
+
+// =============================================
+// Topics Page (tag directory grid)
+// =============================================
+.topic-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr))
+  gap: 1.25rem
+
+.topic-card
+  display: flex
+  flex-direction: column
+  align-items: center
+  text-align: center
+  background: $aws-white
+  border: 1px solid #eee
+  border-radius: 14px
+  padding: 2rem 1rem
+  text-decoration: none !important
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease
+  &:hover
+    transform: translateY(-5px)
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07)
+    border-color: rgba($aws-orange, 0.25)
+    .topic-card-icon
+      background: $aws-orange
+      color: $aws-white
+  .topic-card-icon
+    width: 2.75rem
+    height: 2.75rem
+    border-radius: 50%
+    background: rgba($aws-orange, 0.1)
+    color: $aws-orange
+    display: flex
+    align-items: center
+    justify-content: center
+    margin-bottom: 1rem
+    transition: all 0.25s ease
+    svg
+      width: 1.2rem
+      height: 1.2rem
+  .topic-card-name
+    font-size: 1rem
+    font-weight: 700
+    color: $aws-navy
+    margin-bottom: 0.3rem
+    text-transform: capitalize
+  .topic-card-count
+    font-size: 0.72rem
+    font-weight: 600
+    color: #999
+    text-transform: uppercase
+    letter-spacing: 0.06em
+
+// =============================================
+// Content Typography (markdown rendered)
+// =============================================
+
+.content, .about-content .content
+  h1, h2, h3, h4
+    color: $aws-navy
+    font-weight: 700
+    margin-top: 2rem
+    margin-bottom: 1rem
+    letter-spacing: -0.01em
+  h1
+    font-size: 2rem
+  h2
+    font-size: 1.6rem
+    padding-bottom: 0.5rem
+    border-bottom: 2px solid rgba($aws-orange, 0.15)
+  h3
+    font-size: 1.3rem
+  p
+    margin-bottom: 1.25rem
+    color: #4a5568
+  strong
+    color: $aws-navy
+  blockquote
+    border-left: 4px solid $aws-orange
+    background: rgba($aws-orange, 0.03)
+    padding: 1rem 1.5rem
+    border-radius: 0 8px 8px 0
+    margin: 1.5rem 0
+    p
+      margin-bottom: 0
+  code
+    background: #f0f2f5
+    color: #e74c3c
+    padding: 0.15em 0.4em
+    border-radius: 4px
+    font-size: 0.9em
+  pre
+    background: $aws-navy
+    border-radius: 8px
+    padding: 1.5rem
+    code
+      background: transparent
+      color: #e8e8e8
+      padding: 0
+  a
+    color: $aws-blue
+    text-decoration: none
+    border-bottom: 1px solid transparent
+    transition: border-color 0.2s ease
+    &:hover
+      border-bottom-color: $aws-blue
+  hr
+    background-color: #eee
+    height: 1px
+    margin: 2rem 0
+  ul, ol
+    margin-bottom: 1.25rem
+    li
+      margin-bottom: 0.4rem
+
+// =============================================
+// About Page
+// =============================================
+.about-intro
+  display: flex
+  align-items: center
+  gap: 2.5rem
+  .about-intro-mascot
+    flex-shrink: 0
+    width: 132px
+    height: 132px
+    display: block
+  .about-intro-text p
+    text-align: left
+  @media screen and (max-width: 600px)
+    flex-direction: column
+    text-align: center
+    gap: 1.25rem
+    .about-intro-text p
+      text-align: center
+
+.connect-row
+  display: flex
+  flex-wrap: wrap
+  gap: 0.75rem
+  margin-top: 2rem
+  padding-top: 2rem
+  border-top: 1px solid #f0f0f0
+
+.social-pill
+  display: inline-flex
+  align-items: center
+  gap: 0.5rem
+  background: $aws-white
+  color: $aws-navy
+  font-size: 0.88rem
+  font-weight: 600
+  padding: 0.55rem 1.15rem
+  border-radius: 24px
+  border: 1.5px solid #e3e5e8
+  text-decoration: none !important
+  transition: all 0.2s ease
+  svg
+    width: 1rem
+    height: 1rem
+    color: $aws-orange
+    flex-shrink: 0
+  &:hover
+    border-color: $aws-orange
+    background: rgba($aws-orange, 0.06)
+    transform: translateY(-2px)
+    color: $aws-navy
+
+.about-section-heading
+  font-size: 1.7rem
+  font-weight: 800
+  color: $aws-navy
+  letter-spacing: -0.015em
+  text-align: center
+  margin-bottom: 0.5rem
+
+.about-section-subheading
+  color: #999
+  text-align: center
+  max-width: 480px
+  margin: 0 auto 3rem
+  font-size: 0.98rem
+  line-height: 1.6
+
+.team-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr))
+  gap: 1.5rem
+
+.team-card
+  background: $aws-white
+  border: 1px solid #eee
+  border-radius: 14px
+  padding: 2rem 1.5rem
+  text-align: center
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease
+  &:hover
+    transform: translateY(-5px)
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07)
+    border-color: rgba($aws-orange, 0.2)
+  .team-avatar
+    width: 60px
+    height: 60px
+    border-radius: 50%
+    background: linear-gradient(135deg, $aws-navy 0%, $aws-blue 100%)
+    color: $aws-white
+    display: flex
+    align-items: center
+    justify-content: center
+    font-weight: 700
+    font-size: 1.1rem
+    letter-spacing: 0.02em
+    margin: 0 auto 1.1rem
+  .team-name
+    font-size: 1.02rem
+    font-weight: 700
+    color: $aws-navy
+    margin-bottom: 0.3rem
+  .team-role
+    font-size: 0.72rem
+    font-weight: 700
+    color: $aws-orange
+    text-transform: uppercase
+    letter-spacing: 0.08em
+    margin-bottom: 0.9rem
+  .team-link
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    width: 2rem
+    height: 2rem
+    border-radius: 50%
+    background: rgba($aws-blue, 0.08)
+    color: $aws-blue
+    transition: all 0.2s ease
+    svg
+      width: 1rem
+      height: 1rem
+    &:hover
+      background: $aws-blue
+      color: $aws-white
+
+.contact-grid
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+  gap: 1.5rem
+
+.contact-tile
+  background: $aws-white
+  border: 1px solid #eee
+  border-radius: 14px
+  padding: 2.25rem
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease
+  &:hover
+    transform: translateY(-4px)
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07)
+    border-color: rgba($aws-orange, 0.2)
+  .contact-tile-icon
+    width: 3rem
+    height: 3rem
+    border-radius: 12px
+    background: rgba($aws-orange, 0.1)
+    color: $aws-orange
+    display: flex
+    align-items: center
+    justify-content: center
+    margin-bottom: 1.25rem
+    svg
+      width: 1.4rem
+      height: 1.4rem
+  .contact-tile-title
+    font-size: 1.1rem
+    font-weight: 700
+    color: $aws-navy
+    margin-bottom: 0.5rem
+  .contact-tile-text
+    font-size: 0.92rem
+    color: #777
+    line-height: 1.65
+    margin-bottom: 0
+  .contact-tile-link
+    display: inline-flex
+    align-items: center
+    gap: 0.35rem
+    margin-top: 0.75rem
+    font-weight: 700
+    font-size: 0.88rem
+    color: $aws-orange
+    text-decoration: none
+    &:hover
+      color: $aws-orange-hover
+
+// =============================================
+// Contact Form
+// =============================================
+.contact-card
+  background: $aws-light
+  border-radius: 16px
+  border: 1px solid #e8e8e8
+  padding: 2.75rem
+  .contact-card-heading
+    display: flex
+    align-items: center
+    gap: 0.5rem
+    svg
+      width: 1.15rem
+      height: 1.15rem
+      color: $aws-orange
+      flex-shrink: 0
+  .input, .textarea
+    border-radius: 8px
+    border: 1.5px solid #ddd
+    background: $aws-white
+    font-size: 0.95rem
+    transition: border-color 0.2s ease, box-shadow 0.2s ease
+    &:focus
+      border-color: $aws-orange
+      box-shadow: 0 0 0 3px rgba($aws-orange, 0.12)
+    &::placeholder
+      color: #bbb
+  .button.is-primary
+    background: $aws-orange
+    border: none
+    font-weight: 700
+    border-radius: 8px
+    padding: 1.25em 2.25em
+    font-size: 0.95rem
+    transition: all 0.25s ease
+    &:hover
+      background: $aws-orange-hover
+      transform: translateY(-2px)
+      box-shadow: 0 6px 16px rgba($aws-orange, 0.3)
+
+// =============================================
+// 404 Page
+// =============================================
+.not-found-page
+  min-height: 55vh
+  display: flex
+  align-items: center
+  justify-content: center
+  text-align: center
+  padding: 3rem 1rem
+  .not-found-code
+    font-size: 9rem
+    font-weight: 900
+    color: $aws-navy
+    line-height: 1
+    opacity: 0.08
+    letter-spacing: -0.05em
+  .not-found-title
+    font-size: 2rem
+    font-weight: 700
+    color: $aws-navy
+    margin-top: -1.5rem
+  .not-found-text
+    color: #999
+    font-size: 1.05rem
+    margin: 1rem auto 2.5rem
+    max-width: 420px
+    line-height: 1.7
+
+// =============================================
+// Footer
+// =============================================
+.aws-footer
+  background: linear-gradient(180deg, $aws-navy 0%, $aws-navy-dark 100%)
+  color: rgba(255, 255, 255, 0.65)
+  padding: 5rem 1.5rem 2rem
+  font-size: 0.92rem
+  a
+    color: rgba(255, 255, 255, 0.65)
+    text-decoration: none
+    transition: color 0.2s ease
+    &:hover
+      color: $aws-orange
+  .footer-brand
+    display: inline-flex
+    align-items: center
+    gap: 0.5rem
+    color: $aws-white
+    font-size: 1.6rem
+    font-weight: 800
+    letter-spacing: -0.01em
+    svg
+      width: 1.35rem
+      height: 1.35rem
+      color: $aws-orange
+      flex-shrink: 0
+  .footer-bottom svg
+    width: 0.9rem
+    height: 0.9rem
+    vertical-align: -0.1em
+    color: $aws-orange
+  .footer-tagline
+    color: rgba(255, 255, 255, 0.45)
+    font-size: 0.9rem
+    margin-top: 0.75rem
+    line-height: 1.65
+    max-width: 280px
+  .footer-heading
+    color: $aws-white
+    font-size: 0.8rem
+    font-weight: 700
+    text-transform: uppercase
+    letter-spacing: 0.12em
+    margin-bottom: 1.25rem
+  .footer-link-list
+    list-style: none
+    margin: 0
+    padding: 0
+    li
+      margin-bottom: 0.65rem
+      a
+        font-size: 0.9rem
+  .footer-bottom
+    border-top: 1px solid rgba(255, 255, 255, 0.08)
+    margin-top: 3.5rem
+    padding-top: 1.75rem
+    text-align: center
+    font-size: 0.8rem
+    color: rgba(255, 255, 255, 0.35)
+
+// =============================================
+// Utility
+// =============================================
+.margin-top-0
+  margin-top: 0 !important
+
+.section-light
+  background-color: $aws-light
+
+.section-white
+  background-color: $aws-white
+
+// Keep existing helpers
+.navbar-item .icon
+  color: $primary
+.icon svg
+  width: 1.5rem
+  height: 1.5rem
+  fill: currentColor
 
 .content .taglist
   list-style: none
@@ -28,71 +856,14 @@ $black: #2b2523
     margin-bottom: 1.5rem
     margin-top: 0
 
-// Helper Classes
-.full-width-image-container
-  width: 100vw
-  height: 400px
-  position: relative
-  left: 50%
-  right: 50%
-  margin: 2em -50vw
-  background-size: cover
-  background-position: bottom
-  display: flex
-  justify-content: center
-  align-items: center
-
-.full-width-image
-    width: 100vw
-    height: 400px
-    background-size: cover
-    background-position: bottom
-    display: flex
-    justify-content: center
-    align-items: center
-
-.btn
-    display: inline-block
-    padding: 12px 16px 10px
-    font-size: 18px
-    font-size: 1rem
-    line-height: 1.25
-    background-color: #fff
-    border-radius: .25rem
-    text-decoration: none
-    font-weight: 700
-    color: #CC3700
-    text-align: center
-    -webkit-box-shadow: inset 0 0 0 2px #CC3700
-    box-shadow: inset 0 0 0 2px #CC3700
-    -webkit-transition: all .15s ease
-    transition: all .15s ease
-
-.margin-top-0
-  margin-top: 0 !important
-
-.navbar-item .icon
-  color: $primary
-// Override for use of svg's from https://simpleicons.org/
-.icon svg
-  width: 1.5rem
-  height: 1.5rem
-  fill: currentColor
-.navbar-brand .navbar-item.logo
-  padding: 0 1rem
-footer.footer
-  padding: 3rem 0rem 0rem
-  background-color: transparent
-
 //Menu overrides
 $menu-item-color: $white-ter
 $menu-item-hover-color: $black !important
-$menu-item-hover-background-color: $black
-$menu-item-active-color: $kaldi-red-invert
-$menu-item-active-background-color:	$kaldi-red-invert
-$menu-list-border-left: 1px solid $kaldi-red-invert
+$menu-item-hover-background-color: $white-ter
+$menu-item-active-color: $aws-white
+$menu-item-active-background-color: $primary
+$menu-list-border-left: 1px solid $primary
 $menu-label-color: $white-ter
-
 
 .menu-label
   font-size: 1em !important
@@ -100,41 +871,55 @@ $menu-label-color: $white-ter
 .menu-list
   list-style: none !important
   text-align: left
-.social
-  padding: 2em
-.social a
-    padding: .5em .5em .3em .5em
-    border-radius: 1em
-    background-color: $white-ter
-    margin: .5em
-    width: 1em
-    height: 1em
-    vertical-align: middle
-    display: inline
-
-// blog roll
-.blog-list-item.is-featured
-  background-color: #d6400033
-.blog-list-item header
-  display: flex
-  margin-bottom: 1em
-.blog-list-item .featured-thumbnail
-  flex-basis: 35%
-  margin: 0 1.5em 0 0
-
 
 @import "~bulma"
 
+// Post-Bulma responsive overrides
 
-// responsiveness
+// Bulma's .hero.is-large hero-body defaults to 18rem/6rem padding on
+// tablet+, which dwarfs our fairly compact hero content — rein it in.
+.hero-aws.is-large
+  +tablet
+    .hero-body
+      padding: 5.5rem 3rem
+  +desktop
+    .hero-body
+      padding: 6.5rem 3rem
+
 +tablet-only
-  .blog-list-item .featured-thumbnail
-    flex-basis: 50%
+  .page-banner .page-banner-title
+    font-size: 2.25rem
+  .hero-heading
+    font-size: 2.75rem
 
 +mobile
-  .blog-list-item header
-    display: block
-  .blog-list-item .featured-thumbnail
+  .page-banner
+    padding: 3.5rem 1rem 3rem
+    .page-banner-title
+      font-size: 1.85rem
+    .page-banner-subtitle
+      font-size: 0.95rem
+  .hero-heading
+    font-size: 2rem
+  .hero-subtitle-text
+    font-size: 1rem
+  .hero-btn-primary, .hero-btn-secondary
+    font-size: 0.9rem
+    padding: 0.75em 1.5em
+    width: 100%
+    justify-content: center
+
+  .stats-strip .stat-item
+    padding: 1.5rem 0.75rem
+    .stat-number
+      font-size: 1.75rem
+    .stat-label
+      font-size: 0.7rem
+  .aws-footer
     text-align: center
-    max-width: 70%
-    margin: 0 0 1em
+    .footer-tagline
+      max-width: 100%
+      margin-left: auto
+      margin-right: auto
+    .footer-heading
+      margin-top: 2rem

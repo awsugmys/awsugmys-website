@@ -12,37 +12,106 @@ export const BlogPostTemplate = ({
   description,
   tags,
   title,
+  date,
   helmet,
 }) => {
   const PostContent = contentComponent || Content
 
   return (
-    <section className="section">
+    <div>
       {helmet || ''}
-      <div className="container content">
-        <div className="columns">
-          <div className="column is-10 is-offset-1">
-            <h1 className="title is-size-2 has-text-weight-bold is-bold-light">
-              {title}
-            </h1>
-            <p>{description}</p>
-            <PostContent content={content} />
-            {tags && tags.length ? (
-              <div style={{ marginTop: `4rem` }}>
-                <h4>Tags</h4>
-                <ul className="taglist">
-                  {tags.map(tag => (
-                    <li key={tag + `tag`}>
-                      <Link to={`/tags/${kebabCase(tag)}/`}>{tag}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
+
+      {/* Page Banner */}
+      <div className="page-banner">
+        {date && (
+          <p style={{
+            color: '#FF9900',
+            fontSize: '0.82rem',
+            fontWeight: 700,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            marginBottom: '0.75rem',
+          }}>
+            {date}
+          </p>
+        )}
+        <h1 className="page-banner-title">{title}</h1>
+      </div>
+
+      {/* Article Content */}
+      <section className="section" style={{ paddingBottom: '4rem' }}>
+        <div className="container">
+          <div className="columns is-centered">
+            <div className="column is-8">
+
+                {description && (
+                  <div style={{
+                    borderLeft: '4px solid #FF9900',
+                    paddingLeft: '1.5rem',
+                    marginBottom: '2.5rem',
+                    paddingTop: '0.25rem',
+                    paddingBottom: '0.25rem',
+                  }}>
+                    <p style={{
+                      fontSize: '1.1rem',
+                      color: '#555',
+                      lineHeight: 1.75,
+                      fontStyle: 'italic',
+                      margin: 0,
+                    }}>
+                      {description}
+                    </p>
+                  </div>
+                )}
+                <PostContent className="content" content={content} />
+                {tags && tags.length ? (
+                  <div style={{ 
+                    marginTop: '3rem', 
+                    paddingTop: '2rem', 
+                    borderTop: '1px solid #eee',
+                  }}>
+                    <p style={{ 
+                      fontSize: '0.78rem', 
+                      fontWeight: 700, 
+                      color: '#999', 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.1em', 
+                      marginBottom: '1rem',
+                    }}>
+                      Topics
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                      {tags.map(tag => (
+                        <Link className="tag-pill" to={`/tags/${kebabCase(tag)}/`} key={tag + `tag`}>
+                          {tag}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {/* Back link */}
+                <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid #f5f5f5' }}>
+                  <Link
+                    to="/"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      color: '#007EB9',
+                      fontWeight: 600,
+                      fontSize: '0.9rem',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    ← Back to all stories
+                  </Link>
+                </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   )
 }
 
@@ -51,6 +120,7 @@ BlogPostTemplate.propTypes = {
   contentComponent: PropTypes.func,
   description: PropTypes.string,
   title: PropTypes.string,
+  date: PropTypes.string,
   helmet: PropTypes.object,
 }
 
@@ -63,8 +133,9 @@ const BlogPost = ({ data }) => {
         content={post.html}
         contentComponent={HTMLContent}
         description={post.frontmatter.description}
+        date={post.frontmatter.date}
         helmet={
-          <Helmet titleTemplate="%s | Blog">
+          <Helmet titleTemplate="%s | AWS UG Mysuru">
             <title>{`${post.frontmatter.title}`}</title>
             <meta
               name="description"

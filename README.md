@@ -9,12 +9,23 @@ This is the official website for AWS User Group Mysuru, a community of passionat
 
 🌐 **Live Website**: [awsugmys.in](https://awsugmys.in)
 
+---
+
+## 🌿 Branches
+
+| Branch | Purpose |
+|---|---|
+| `main` | Original stable website |
+| `website-2.0` | ✨ Redesigned UI — AWS-branded, professional, responsive |
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - Node.js (v16 or higher)
-- npm or yarn
+- npm
 - Git
 
 ### Local Development
@@ -25,45 +36,112 @@ This is the official website for AWS User Group Mysuru, a community of passionat
    cd awsugmys-website
    ```
 
-2. **Install dependencies**
+2. **Switch to the new design branch** *(for website-2.0)*
+   ```bash
+   git checkout website-2.0
+   ```
+
+3. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Start developing**
+4. **Start the dev server**
    ```bash
    npm run develop
    ```
 
-4. **Open your browser**
-   
-   Your site is now running at `http://localhost:8000`!
+5. **Open your browser**
+
+   Your site is running at `http://localhost:8000`
+
+### Troubleshooting: Port already in use
+
+If port 8000 is already occupied:
+```bash
+# Kill whatever is using port 8000, then restart
+kill -9 $(lsof -ti:8000) 2>/dev/null; npm run develop
+```
+
+### Clean build (if you see stale/broken pages)
+
+```bash
+npx gatsby clean && npm run develop
+```
+
+---
 
 ## 🏗️ Architecture
 
-This website is built with modern web technologies:
+This website is built with:
 
-- **Gatsby** - Static site generator for React
-- **React** - UI library
-- **Bulma** - CSS framework for responsive design
-- **GitHub Actions** - CI/CD pipeline
-- **AWS S3** - Static website hosting
-- **AWS CloudFront** - Global CDN
-- **Terraform** - Infrastructure as Code
+- **Gatsby** — Static site generator for React
+- **React** — UI component library
+- **Bulma + Sass** — CSS framework & custom design system
+- **GitHub Actions** — CI/CD pipeline
+- **AWS S3** — Static website hosting
+- **AWS CloudFront** — Global CDN
+- **Terraform** — Infrastructure as Code
 
-## 🎨 Branding
+---
 
-The website uses the official AWS User Group Mysuru branding:
+## 🎨 Design System (website-2.0)
 
-- **Primary Logo**: Black background with purple text (`Black-Purple.png`)
-- **Alternative Logo**: White background with purple text (`White-Purple.png`)
-- **Usage Guidelines**: See [BRANDING.md](BRANDING.md) for detailed guidelines
+The `website-2.0` branch introduces a full AWS-branded design system defined in `src/components/all.sass`:
+
+| Token | Value | Usage |
+|---|---|---|
+| `$aws-navy` | `#232F3E` | Primary background, headings |
+| `$aws-orange` | `#FF9900` | Accents, CTAs, highlights |
+| `$aws-blue` | `#007EB9` | Links, secondary accents |
+| `$aws-light` | `#F7F8F8` | Section backgrounds |
+
+### Key components added
+
+- **`src/components/Icons.js`** — Inline SVG icon library
+- **`static/img/mysuru-palace.png`** — Mysuru Palace sketch used as hero watermark
+- Reusable classes: `.hero-btn-primary`, `.hero-btn-secondary`, `.page-banner`, `.pillar-card`, `.event-card`, `.tag-pill`, `.stats-strip`, `.aws-footer`
+
+---
+
+## 📁 Project Structure
+
+```
+awsugmys-website/
+├── src/
+│   ├── components/
+│   │   ├── all.sass          # Full design system & styles
+│   │   ├── Navbar.js         # Sticky navbar with mobile menu
+│   │   ├── Layout.js         # Global layout + footer
+│   │   ├── ContactForm.js    # Event notification form
+│   │   └── Icons.js          # SVG icon library (website-2.0)
+│   ├── pages/
+│   │   ├── index.js          # Homepage (hero, stats, pillars, posts)
+│   │   ├── 404.js            # Branded 404 page
+│   │   ├── about/index.md    # About page content & frontmatter
+│   │   └── tags/index.js     # Topics directory
+│   ├── templates/
+│   │   ├── about-page.js     # About page template
+│   │   ├── blog-post.js      # Blog post template
+│   │   └── tags.js           # Tag filter template
+│   └── img/                  # Source images
+├── static/
+│   └── img/                  # Static assets (logos, palace image)
+├── logos/                    # Brand logos
+├── infrastructure/           # Terraform configuration
+├── .github/
+│   └── workflows/            # GitHub Actions CI/CD
+├── scripts/                  # Utility scripts
+└── docs/                     # Documentation
+```
+
+---
 
 ## 📝 Content Management
 
 ### Adding Blog Posts
 
-Create new blog posts in `src/pages/blog/` using this format:
+Create new posts in `src/pages/blog/` using this format:
 
 ```markdown
 ---
@@ -72,7 +150,6 @@ title: Your Post Title
 date: 2024-12-16T10:00:00.000Z
 description: Brief description of your post
 featuredpost: false
-featuredimage: /img/your-image.jpg
 tags:
   - aws
   - community
@@ -82,104 +159,84 @@ tags:
 Your blog content here...
 ```
 
-### Updating About Page
+### Updating the About Page
 
-Edit `src/pages/about/index.md` to update:
-- Leadership team information
-- Contact details
-- Community information
+Edit `src/pages/about/index.md` to update team members, social links, and contact details. The frontmatter supports:
+
+```yaml
+---
+connect:
+  - label: Meetup
+    icon: meetup
+    url: https://meetup.com/awsugmys/
+team:
+  - name: Your Name
+    role: Co-Organiser
+    url: https://linkedin.com/in/yourprofile
+contactEmail: info@awsugmys.in
+speakerFormUrl: https://forms.gle/...
+---
+```
+
+---
+
+## 🛠️ Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run develop` | Start dev server at `http://localhost:8000` |
+| `npm run build` | Build production static site to `/public` |
+| `npm run serve` | Serve the built `/public` folder at `http://localhost:9000` |
+| `npx gatsby clean` | Clear `.cache` and `public` folders |
+
+---
 
 ## 🚀 Deployment
 
 ### Infrastructure Setup
 
-The AWS infrastructure is managed with Terraform:
+AWS infrastructure is managed with Terraform:
 
-1. **Prerequisites**
-   - AWS CLI configured
-   - Terraform installed
+```bash
+cd infrastructure
+./deploy-infrastructure.sh
+```
 
-2. **Deploy Infrastructure**
-   ```bash
-   cd infrastructure
-   ./deploy-infrastructure.sh
-   ```
-
-3. **Configure GitHub Actions**
-   
-   Add these secrets to your GitHub repository settings:
-   - `AWS_ACCESS_KEY_ID`
-   - `AWS_SECRET_ACCESS_KEY`
-   - `AWS_REGION`
-   - `S3_BUCKET_NAME`
-   - `CLOUDFRONT_DISTRIBUTION_ID`
+**GitHub Secrets required:**
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION`
+- `S3_BUCKET_NAME`
+- `CLOUDFRONT_DISTRIBUTION_ID`
 
 ### Automatic Deployment
 
-The website automatically deploys when you push to the `main` branch:
-
-1. GitHub Actions builds the site
-2. Deploys to S3
+Pushes to `main` automatically:
+1. GitHub Actions builds the site with `npm run build`
+2. Deploys static files to S3
 3. Invalidates CloudFront cache
-4. Site is live at [awsugmys.in](https://awsugmys.in)
+4. Site goes live at [awsugmys.in](https://awsugmys.in)
 
-## 📁 Project Structure
+> **Note:** The `website-2.0` branch does not auto-deploy. Merge to `main` when ready for production.
 
-```
-awsugmys-website/
-├── src/
-│   ├── components/          # React components
-│   ├── pages/              # Page content (markdown & React)
-│   ├── templates/          # Page templates
-│   └── img/               # Source images
-├── static/
-│   └── img/               # Static images
-├── infrastructure/         # Terraform configuration
-├── .github/
-│   └── workflows/         # GitHub Actions
-├── scripts/               # Utility scripts
-└── docs/                  # Documentation
-```
-
-## 🛠️ Development
-
-### Available Scripts
-
-- `npm run develop` - Start development server
-- `npm run build` - Build for production
-- `npm run serve` - Serve production build locally
-- `npm run clean` - Clean cache and public folders
-
-### Adding New Features
-
-1. Create feature branch: `git checkout -b feature/your-feature`
-2. Make changes and test locally
-3. Commit changes: `git commit -m "Add your feature"`
-4. Push branch: `git push origin feature/your-feature`
-5. Create Pull Request
+---
 
 ## 🤝 Contributing
 
-We welcome contributions from the community! Please:
-
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes and test locally with `npm run develop`
+4. Commit: `git commit -m "feat: describe your change"`
+5. Push: `git push origin feature/your-feature`
+6. Open a Pull Request against `website-2.0` (or `main` for hotfixes)
 
-### Code Style
-
-- Use Prettier for code formatting
-- Follow React best practices
-- Write meaningful commit messages
-- Update documentation as needed
+---
 
 ## 👥 Leadership Team
 
-- **Yeshwanth L M** - Lead ([LinkedIn](https://www.linkedin.com/in/yeshwanth-l-m/))
-- **Girish A R** - Co-Organiser ([LinkedIn](https://www.linkedin.com/in/girish-a-r-a16aa3159/))
-- **Aniruddh Koundinya** - Co-Organiser ([LinkedIn](https://www.linkedin.com/in/aniruddhkoundinya/))
+- **Yeshwanth L M** — Lead ([LinkedIn](https://www.linkedin.com/in/yeshwanth-l-m/))
+- **Girish A R** — Co-Organiser ([LinkedIn](https://www.linkedin.com/in/girish-a-r-a16aa3159/))
+- **Aniruddh Koundinya** — Co-Organiser ([LinkedIn](https://www.linkedin.com/in/aniruddhkoundinya/))
 
 ## 📞 Contact
 
@@ -190,18 +247,14 @@ We welcome contributions from the community! Please:
 
 - [Meetup Group](https://www.meetup.com/awsugmys/)
 - [LinkedIn](https://www.linkedin.com/company/awsugmys)
-- [Twitter](https://www.twitter.com/awsugmys)
+- [Twitter / X](https://www.twitter.com/awsugmys)
 - [Facebook](https://www.facebook.com/awsugmys/)
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- AWS User Group Kochi for inspiration
-- AWS Community for support
-- All contributors and community members
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
