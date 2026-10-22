@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "institution": {
+      "type": "string"
+    },
+    "shortName": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string",
+      "enum": [
+        "Mysuru",
+        "Mandya"
+      ]
+    },
+    "location": {
+      "type": "string"
+    },
+    "leader": {
+      "type": "string"
+    },
+    "meetupUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "order": {
+      "default": 99,
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "institution",
+    "shortName",
+    "area",
+    "location",
+    "meetupUrl"
+  ]
+}

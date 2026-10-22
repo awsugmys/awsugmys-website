@@ -1,44 +1,50 @@
 {
   "name": "awsugmys-website",
-  "description": "AWS User Group Mysuru Official Website",
-  "version": "1.0.0",
-  "author": "AWS User Group Mysuru",
-  "dependencies": {
-    "bulma": "^0.9.4",
-    "gatsby": "^5.13.0",
-    "gatsby-plugin-image": "^3.13.0",
-    "gatsby-plugin-react-helmet": "^6.13.0",
-    "gatsby-plugin-sass": "^6.13.0",
-    "gatsby-plugin-sharp": "^5.13.0",
-    "gatsby-remark-copy-linked-files": "^6.13.0",
-    "gatsby-remark-images": "^7.13.0",
-    "gatsby-source-filesystem": "^5.13.0",
-    "gatsby-transformer-remark": "^6.13.0",
-    "gatsby-transformer-sharp": "^5.13.0",
-    "lodash": "^4.17.21",
-    "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-helmet": "^6.1.0",
-    "sass": "^1.69.0"
-  },
-  "keywords": [
-    "gatsby",
-    "aws",
-    "mysuru"
-  ],
+  "description": "AWS User Group Mysuru community website",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
   "license": "MIT",
-  "main": "n/a",
   "scripts": {
-    "start": "npm run develop",
-    "clean": "gatsby clean",
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "serve": "gatsby serve",
-    "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "astro check && eslint . && prettier --check .",
+    "assets:logos": "node scripts/brand/build-logos-and-icons.mjs",
+    "assets:fonts": "node scripts/brand/build-fonts.mjs",
+    "assets:hero": "node scripts/hero/build-hero-assets.mjs",
+    "assets:social-image": "node scripts/brand/build-social-image.mjs",
+    "check:hero-alignment": "node scripts/hero/check-alignment.mjs",
+    "check:hero-gait": "node scripts/hero/check-gait.mjs",
+    "screenshots": "node scripts/take-screenshots.mjs",
+    "check:cdn-routing": "node infrastructure/functions/viewer-request.test.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.0",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "7.4.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
-    "prettier": "^3.1.0"
+    "@astrojs/check": "^0.9.12",
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/parser": "^8.72.0",
+    "eslint": "^10.13.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.13.0",
+    "playwright": "^1.64.1",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "subset-font": "^2.9.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.0"
+  },
+  "engines": {
+    "node": ">=22.22.0"
   }
 }

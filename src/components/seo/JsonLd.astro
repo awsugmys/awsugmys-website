@@ -1,0 +1,9 @@
+---
+// Renders schema.org structured data. `<` is escaped so content can't close the tag.
+interface Props {
+  data: Record<string, unknown> | Record<string, unknown>[];
+}
+const json = JSON.stringify(Astro.props.data).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" set:html={json} />

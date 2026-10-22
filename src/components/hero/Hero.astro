@@ -1,0 +1,152 @@
+---
+import Icon from '../ui/Icon.astro';
+import HeroScene from './HeroScene.astro';
+import { SITE } from '../../data/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__scene">
+    <HeroScene />
+  </div>
+  <div class="hero__content">
+    <div class="container">
+      <div class="hero__copy">
+        <p class="eyebrow">AWS User Group · Mysuru, Karnataka</p>
+        <h1 id="hero-title">Build on AWS with the Mysuru Community</h1>
+        <p class="hero__lede">
+          Developers, architects, DevOps engineers, students and cloud enthusiasts, learning,
+          sharing and networking in the city of Heritage.
+        </p>
+        <div class="btn-row hero__ctas">
+          <a class="btn btn--primary" href={SITE.meetupUrl} rel="noopener" target="_blank">
+            <Icon name="meetup" /> Join us on Meetup
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+          <a class="btn btn--ghost" href="/events/">
+            <Icon name="calendar" /> See events
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    --hero-sky: light-dark(#97cef2, #000000);
+    --hero-scrim: light-dark(rgb(236 246 255 / 0.62), rgb(4 5 18 / 0.62));
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    background: var(--hero-sky);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  /* Phones and tablets: copy on the sky colour, then the scene. */
+  .hero__scene {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    --el-height: 54%;
+    --el-cross: 57s;
+    --road-h: 11cqh;
+    --palace-blur: 0.8px;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .hero__copy {
+    max-width: 34rem;
+  }
+
+  .hero h1 {
+    margin-top: var(--space-3);
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.6rem);
+  }
+
+  .hero__lede {
+    margin-top: var(--space-4);
+    color: var(--c-text);
+    font-size: var(--step-1);
+  }
+
+  .hero :global(.eyebrow) {
+    color: light-dark(#3d1f7a, #ddc9ff);
+  }
+
+  .hero :global(.eyebrow)::before {
+    background: currentColor;
+  }
+
+  .hero__ctas {
+    margin-top: var(--space-5);
+  }
+
+  @media (min-width: 40rem) {
+    .hero__scene {
+      aspect-ratio: 16 / 9;
+      --el-height: 54%;
+      --el-cross: 71s;
+      --road-h: 9cqh;
+    }
+  }
+
+  /* Desktop: the scene fills the viewport; copy sits over the open sky. */
+  @media (min-width: 64rem) {
+    .hero {
+      display: block;
+      height: calc(100svh - 4.5rem);
+      min-height: 40rem;
+      max-height: 68rem;
+    }
+
+    .hero__scene {
+      position: absolute;
+      inset: 0;
+      aspect-ratio: auto;
+      --el-height: 46%;
+      --el-cross: 75s;
+      --el-rest: 60cqw;
+      /* zoom out: show the full facade, sky continues above the artwork */
+      --palace-size: 100% auto;
+      --palace-blur: 1.5px;
+      --road-h: 6.5cqh;
+    }
+
+    .hero__content {
+      padding-top: clamp(1.25rem, 3.5vh, 2.5rem);
+    }
+
+    .hero__content::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto -40% 0;
+      width: min(62%, 52rem);
+      background: radial-gradient(ellipse 70% 60% at 25% 30%, var(--hero-scrim), transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero__copy {
+      max-width: 42rem;
+    }
+
+    .hero h1 {
+      margin-top: var(--space-2);
+      font-size: clamp(2.4rem, 1.5rem + 1.9vw, 3.4rem);
+    }
+
+    .hero__lede {
+      max-width: 31rem;
+      margin-top: var(--space-3);
+      font-size: var(--step-0);
+    }
+
+    .hero__ctas {
+      margin-top: var(--space-4);
+    }
+  }
+</style>

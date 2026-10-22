@@ -1,0 +1,303 @@
+---
+import Icon from '../ui/Icon.astro';
+import {
+  eventBadge,
+  eventDateLabel,
+  eventLocationLabel,
+  eventTimeLabel,
+  isUpcoming,
+  platformName,
+  type Event,
+} from '../../lib/content';
+
+interface Props {
+  event: Event;
+  headingLevel?: 'h2' | 'h3';
+  compact?: boolean;
+}
+
+const { event, headingLevel: H = 'h3', compact = false } = Astro.props;
+const { data } = event;
+const upcoming = isUpcoming(event);
+const platformIcon = (url: string): 'meetup' | 'luma' | 'external' => {
+  const name = platformName(url);
+  return name === 'Meetup' ? 'meetup' : name === 'Luma' ? 'luma' : 'external';
+};
+const badge = eventBadge(event);
+const time = eventTimeLabel(event);
+const postHref = data.blogPost ? `/blog/${data.blogPost}/` : undefined;
+const primaryHref = postHref ?? data.registrationUrl;
+---
+
+<article class="card card--interactive event-card" class:list={{ 'event-card--compact': compact }}>
+  <div class="event-card__badge" aria-hidden="true">
+    <span class="event-card__month">{badge.month}</span>
+    <span class="event-card__day">{badge.day}</span>
+  </div>
+
+  <div class="event-card__body">
+    <div class="event-card__chips">
+      <span class:list={['chip', upcoming ? 'chip--upcoming' : 'chip--past']}>
+        {upcoming ? 'Upcoming' : 'Past event'}
+      </span>
+      <span class="chip">
+        {data.format === 'in-person' ? 'In person' : data.format === 'online' ? 'Online' : 'Hybrid'}
+      </span>
+      {data.placeholder && <span class="chip chip--placeholder">Placeholder</span>}
+    </div>
+
+    <H class="event-card__title">
+      {primaryHref ? (
+        <a class="card-link" href={primaryHref} rel={postHref ? undefined : 'noopener'}>
+          {data.title}
+        </a>
+      ) : (
+        data.title
+      )}
+    </H>
+
+    <ul class="event-card__meta">
+      <li>
+        <Icon name="calendar" size={18} />
+        <span>{eventDateLabel(event)}</span>
+      </li>
+      {time && (
+        <li>
+          <Icon name="clock" size={18} />
+          <span>{time}</span>
+        </li>
+      )}
+      <li>
+        <Icon name={data.format === 'online' ? 'globe' : 'pin'} size={18} />
+        <span>{eventLocationLabel(event)}</span>
+      </li>
+      {data.speakers.length > 0 && (
+        <li>
+          <Icon name="mic" size={18} />
+          <span>
+            {data.speakers.map((s, i) => (
+              <>
+                {i > 0 && ', '}
+                {s.url ? (
+                  <a class="event-card__inline-link" href={s.url} rel="noopener" target="_blank">
+                    {s.name}
+                  </a>
+                ) : (
+                  s.name
+                )}
+              </>
+            ))}
+          </span>
+        </li>
+      )}
+    </ul>
+
+    {!compact && <p class="event-card__desc">{data.description}</p>}
+    {data.note && <p class="event-card__note">{data.note}</p>}
+
+    {!compact && (
+      <div class="event-card__actions">
+        {data.registrationUrl &&
+          (upcoming ? (
+            <a
+              class="btn btn--primary event-card__register"
+              href={data.registrationUrl}
+              rel="noopener"
+              target="_blank"
+            >
+              Register on {platformName(data.registrationUrl)}
+              <span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
+            </a>
+          ) : (
+            <a
+              class="event-card__action"
+              href={data.registrationUrl}
+              rel="noopener"
+              target="_blank"
+            >
+              <Icon name={platformIcon(data.registrationUrl)} size={18} />
+              {platformName(data.registrationUrl)} page
+              <span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
+            </a>
+          ))}
+        {data.alternateUrl && (
+          <a class="event-card__action" href={data.alternateUrl} rel="noopener" target="_blank">
+            <Icon name="external" size={18} />
+            Also listed on {platformName(data.alternateUrl)}
+            <span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        )}
+        {data.recordingUrl && (
+          <a class="event-card__action" href={data.recordingUrl} rel="noopener" target="_blank">
+            <Icon name="play" size={18} />
+            Watch recording
+            <span class="visually-hidden"> of {data.title} (opens in a new tab)</span>
+          </a>
+        )}
+        {data.slidesUrl && (
+          <a class="event-card__action" href={data.slidesUrl} rel="noopener" target="_blank">
+            <Icon name="slides" size={18} />
+            Slides
+            <span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
+          </a>
+        )}
+        {data.materialsUrl && (
+          <a class="event-card__action" href={data.materialsUrl} rel="noopener" target="_blank">
+            <Icon name="github" size={18} />
+            Workshop materials
+            <span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
+          </a>
+        )}
+        {data.blogPost && (
+          <a class="event-card__action" href={`/blog/${data.blogPost}/`}>
+            <Icon name="arrow" size={18} />
+            Read the post
+            <span class="visually-hidden"> about {data.title}</span>
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  .event-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    align-items: start;
+  }
+
+  .event-card__badge {
+    display: grid;
+    place-items: center;
+    width: 4.25rem;
+    padding: var(--space-3) var(--space-2) var(--space-2);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-arch);
+    background: var(--c-bg-alt);
+    line-height: 1;
+    text-align: center;
+  }
+
+  .event-card__month {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-accent-text);
+  }
+
+  .event-card__day {
+    margin-top: var(--space-1);
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--c-heading);
+  }
+
+  .event-card__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+
+  .chip {
+    padding: 0.1rem 0.6rem;
+    border: 1px solid var(--c-border);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--c-text-muted);
+  }
+
+  .chip--upcoming {
+    border-color: transparent;
+    background: var(--c-btn-bg);
+    color: var(--c-btn-text);
+  }
+
+  .chip--placeholder {
+    border-style: dashed;
+    border-color: var(--c-highlight);
+  }
+
+  .event-card__title {
+    font-size: var(--step-1);
+  }
+
+  .event-card__meta {
+    display: grid;
+    gap: var(--space-1);
+    margin-top: var(--space-3);
+    padding: 0;
+    list-style: none;
+    color: var(--c-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .event-card__meta li {
+    display: flex;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+
+  .event-card__meta :global(svg) {
+    flex: none;
+    margin-top: 0.2em;
+    color: var(--c-accent-text);
+  }
+
+  .event-card__inline-link {
+    position: relative;
+    z-index: 1;
+  }
+
+  .event-card__desc {
+    margin-top: var(--space-3);
+  }
+
+  .event-card__note {
+    margin-top: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-left: 3px solid var(--c-highlight);
+    background: var(--c-bg-alt);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.92rem;
+  }
+
+  .event-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .event-card__register {
+    position: relative;
+    z-index: 1;
+  }
+
+  .event-card__action {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-height: 2.75rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 30rem) {
+    .event-card {
+      grid-template-columns: 1fr;
+    }
+
+    .event-card__badge {
+      display: none;
+    }
+  }
+</style>

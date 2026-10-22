@@ -1,0 +1,198 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import {
+  featuredImage,
+  formatDate,
+  postUrl,
+  readingTime,
+  tagSlug,
+  type Post,
+} from '../lib/content';
+import { SITE } from '../data/site';
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, newer, older } = Astro.props;
+const { data } = post;
+const img = featuredImage(post);
+const url = new URL(postUrl(post), SITE.url).href;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: data.title,
+  description: data.description,
+  datePublished: data.date.toISOString(),
+  url,
+  mainEntityOfPage: url,
+  keywords: data.tags.join(', '),
+  author: { '@id': `${SITE.url}/#organization` },
+  publisher: { '@id': `${SITE.url}/#organization` },
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  type="article"
+  publishedTime={data.date}
+  jsonLd={[articleSchema]}
+>
+  <article class="post">
+    <header class="post__header container--narrow">
+      <p class="post__back">
+        <a href="/blog/">← All posts</a>
+      </p>
+      <h1>{data.title}</h1>
+      <p class="post__meta">
+        <span>
+          <Icon name="calendar" size={16} />
+          <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
+        </span>
+        <span>
+          <Icon name="clock" size={16} />
+          {readingTime(post.body)} min read
+        </span>
+      </p>
+      {data.tags.length > 0 && (
+        <ul class="tag-list post__tags" aria-label="Tags">
+          {data.tags.map((tag) => (
+            <li>
+              <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
+                #{tag}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </header>
+
+    {img && (
+      <div class="container post__figure">
+        <Image src={img} alt="" widths={[640, 1100]} sizes="(min-width: 72rem) 68rem, 100vw" />
+      </div>
+    )}
+
+    <div class="container--narrow prose post__body">
+      <slot />
+    </div>
+  </article>
+
+  <nav class="container--narrow post-nav" aria-label="More posts">
+    {older ? (
+      <a class="card card--interactive post-nav__link" href={postUrl(older)} rel="prev">
+        <span class="muted">← Older</span>
+        <span class="post-nav__title">{older.data.title}</span>
+      </a>
+    ) : (
+      <span />
+    )}
+    {newer ? (
+      <a
+        class="card card--interactive post-nav__link post-nav__link--next"
+        href={postUrl(newer)}
+        rel="next"
+      >
+        <span class="muted">Newer →</span>
+        <span class="post-nav__title">{newer.data.title}</span>
+      </a>
+    ) : (
+      <span />
+    )}
+  </nav>
+</BaseLayout>
+
+<style>
+  .post__header {
+    padding-top: var(--space-7);
+    text-align: center;
+  }
+
+  .post__back {
+    margin-bottom: var(--space-4);
+    font-weight: 600;
+  }
+
+  .post__header h1 {
+    font-size: var(--step-3);
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-4);
+    color: var(--c-text-muted);
+  }
+
+  .post__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .post__meta :global(svg) {
+    color: var(--c-accent-text);
+  }
+
+  .post__tags {
+    justify-content: center;
+    margin-top: var(--space-4);
+  }
+
+  .post__figure {
+    margin-top: var(--space-6);
+  }
+
+  .post__figure :global(img) {
+    width: 100%;
+    border-radius: var(--radius);
+  }
+
+  .post__body {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--c-border);
+  }
+
+  .post-nav {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 40rem) {
+    .post-nav {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .post-nav__link {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-5);
+    color: var(--c-text);
+    text-decoration: none;
+  }
+
+  .post-nav__link:hover {
+    color: var(--c-text);
+  }
+
+  .post-nav__link--next {
+    text-align: right;
+  }
+
+  .post-nav__title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--c-heading);
+  }
+</style>

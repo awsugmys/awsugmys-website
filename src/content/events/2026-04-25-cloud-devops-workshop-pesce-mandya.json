@@ -1,0 +1,11 @@
+{
+  "title": "AWS Cloud/DevOps Workshop @ PESCE, Mandya",
+  "date": "2026-04-25",
+  "startTime": "09:30",
+  "format": "in-person",
+  "venue": { "name": "Placement Auditorium, PESCE", "city": "Mandya" },
+  "speakers": [{ "name": "Yeshwanth L M", "url": "https://www.linkedin.com/in/yeshwanth-l-m/" }],
+  "description": "A practical, hands-on workshop on Cloud and DevOps fundamentals for students and early-career professionals: AWS core services, the DevOps lifecycle, live demos and labs.",
+  "registrationUrl": "https://www.meetup.com/awsugmys/events/314442431/",
+  "blogPost": "2026-04-25-aws-cloud-devops-workshop-pesce-mandya"
+}

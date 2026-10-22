@@ -1,0 +1,129 @@
+/*
+ * Design tokens — the single place to change colours, type and spacing.
+ *
+ * Look: a clean, AWS-style technical community site (squid-ink navy, AWS
+ * orange for actions, AWS UG purple for links) with the Mysuru palace as the
+ * visual motif.
+ *
+ * Colours use light-dark(<light>, <dark>). The active scheme comes from
+ * `color-scheme`, which follows the OS by default and is pinned by
+ * `data-theme` on <html> once the visitor picks a theme.
+ *
+ * `--night` is 0 in light mode and 1 in dark mode, for non-colour switches
+ * (palace bulbs, logo variant) via opacity/calc().
+ */
+:root {
+  color-scheme: light dark;
+  --night: 0;
+
+  /* Brand — sampled from /logos and BRANDING.md */
+  --brand-purple: #ad7ff6;
+  --brand-navy: #1c283c;
+  --squid-ink: #232f3e;
+  --aws-orange: #ff9900;
+
+  /* Surfaces & text */
+  --c-bg: light-dark(#ffffff, #0f1b2a);
+  --c-bg-alt: light-dark(#f4f6f8, #132131);
+  --c-surface: light-dark(#ffffff, #172636);
+  --c-surface-raised: light-dark(#ffffff, #1c2d40);
+  --c-border: light-dark(#e1e4e8, #2a3b4f);
+  --c-text: light-dark(#16191f, #e9edf1);
+  --c-text-muted: light-dark(#545b64, #aab4bf);
+  --c-heading: light-dark(#16191f, #ffffff);
+
+  /* Accents */
+  --c-accent: var(--aws-orange);
+  --c-accent-text: light-dark(#c45500, #ffb84d); /* orange that passes AA as text */
+  --c-link: light-dark(#6a3fc2, #c9a8ff);
+  --c-link-hover: light-dark(#4f2a9e, #e4d4ff);
+  --c-btn-bg: #ff9900;
+  --c-btn-bg-hover: #ec7211;
+  --c-btn-text: #16191f;
+  --c-focus: light-dark(#6a3fc2, #ffb84d);
+  --c-header-bg: light-dark(rgb(255 255 255 / 0.92), rgb(15 27 42 / 0.9));
+  --c-footer-bg: light-dark(#232f3e, #0a1420);
+  --c-footer-text: #d5dbe1;
+  --c-footer-muted: #aab4bf;
+
+  /* Hero scene */
+  --sky-top: light-dark(#bcdcf0, #050a1c);
+  --sky-mid: light-dark(#e2eff5, #0d1430);
+  --sky-low: light-dark(#f6efe0, #1e1b45);
+  --sun: light-dark(#ffd77a, transparent);
+  --cloud: light-dark(#ffffff, #1a1f40);
+  --hills-far: light-dark(#cdd3df, #141a3a);
+  --hills: light-dark(#adb6c8, #1b2248);
+  --palace-wall: light-dark(#efe2c4, #1e1b3b);
+  --palace-shade: light-dark(#dcc79c, #17142f);
+  --palace-dome: light-dark(#b45468, #2a2050);
+  --palace-dome-shade: light-dark(#94404f, #221a42);
+  --palace-line: light-dark(#8f6a3f, #3b3167);
+  --palace-window: light-dark(#7b5a46, #ffcf6b);
+  --bulb: #ffd36b;
+  --ground: light-dark(#d9c7a3, #110e25);
+  --ground-edge: light-dark(#c4ad82, #1c1838);
+
+  /* Procession palette */
+  --elephant: light-dark(#7d7b88, #6f6d80);
+  --elephant-shade: light-dark(#66646f, #5a5869);
+  --elephant-far: light-dark(#5f5d6a, #4f4d60);
+  --velvet-green: #1f6b4a;
+  --gold-leaf: #e0aa3e;
+  --gold-leaf-light: #f6d27a;
+  --gold-leaf-dark: #b07a1c;
+  --skin: #a8693e;
+  --skin-deity: #e7b07a;
+
+  /* Typography: Amazon fonts only. Amazon Ember for text and UI, Amazon Ember
+     Display for headings (self-hosted, see src/lib/fonts.ts); Arial is the
+     fallback, as on amazon.com. */
+  --font-sans: 'Amazon Ember', Arial, sans-serif;
+  --font-display: 'Amazon Ember Display', 'Amazon Ember', Arial, sans-serif;
+
+  --step--1: clamp(0.84rem, 0.82rem + 0.1vw, 0.9rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --step-1: clamp(1.15rem, 1.1rem + 0.3vw, 1.3rem);
+  --step-2: clamp(1.4rem, 1.28rem + 0.6vw, 1.75rem);
+  --step-3: clamp(1.7rem, 1.5rem + 1vw, 2.3rem);
+  --step-4: clamp(2.1rem, 1.7rem + 2vw, 3.4rem);
+
+  /* Spacing, shape, motion */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --container: 72rem;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-arch: var(--radius); /* legacy alias: badges and icon tiles */
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.05), 0 4px 12px rgb(16 24 40 / 0.06);
+  --shadow-hover: 0 2px 4px rgb(16 24 40 / 0.06), 0 12px 28px rgb(16 24 40 / 0.12);
+  --shadow-panel: 0 20px 48px -16px rgb(16 24 40 / 0.28);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --night: 0;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --night: 1;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 6px 18px rgb(0 0 0 / 0.3);
+  --shadow-hover: 0 2px 6px rgb(0 0 0 / 0.45), 0 14px 32px rgb(0 0 0 / 0.45);
+  --shadow-panel: 0 20px 48px -16px rgb(0 0 0 / 0.7);
+}
+
+/* No-JS fallback: follow the OS when no explicit theme is set. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --night: 1;
+  }
+}

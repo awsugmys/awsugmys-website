@@ -1,198 +1,77 @@
-# Contributing to AWS User Group Mysuru Website
+# Contributing
 
-Thank you for your interest in contributing to the AWS User Group Mysuru website! We welcome contributions from the community.
+Thanks for helping improve the AWS User Group Mysuru website! Content fixes, new blog posts,
+event updates and code improvements are all welcome.
 
-## 🤝 How to Contribute
+## How changes reach the live site
 
-### Reporting Issues
+1. You open a pull request against `main`.
+2. Automated checks build the site and run type, lint and formatting checks.
+3. An organiser reviews and merges it.
+4. The merge to `main` deploys automatically.
 
-If you find a bug or have a suggestion:
+Only organisers with write access can merge, so nothing goes live without review. See
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for how the workflows and AWS hosting fit together.
 
-1. Check if the issue already exists in [GitHub Issues](https://github.com/awsugmys/awsugmys-website/issues)
-2. If not, create a new issue with:
-   - Clear description of the problem
-   - Steps to reproduce (for bugs)
-   - Expected vs actual behavior
-   - Screenshots if applicable
+## Making a change
 
-### Contributing Code
+```bash
+git clone https://github.com/awsugmys/awsugmys-website.git   # or your fork
+cd awsugmys-website
+npm ci
+git checkout -b update/short-description
+npm run dev                                                    # http://localhost:4321
+```
 
-1. **Fork the repository**
-   ```bash
-   git fork https://github.com/awsugmys/awsugmys-website.git
-   ```
+Before opening a pull request:
 
-2. **Clone your fork**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/awsugmys-website.git
-   cd awsugmys-website
-   ```
+```bash
+npm run format   # fix formatting
+npm run check    # type-check, lint and formatting check — must pass
+npm run build    # make sure the production build works
+```
 
-3. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+## Content changes
 
-4. **Make your changes**
-   - Follow the existing code style
-   - Test your changes locally
-   - Update documentation if needed
+Templates for every content type are in the [README](README.md#editing-content):
 
-5. **Commit your changes**
-   ```bash
-   git add .
-   git commit -m "Add: brief description of your changes"
-   ```
+| What              | Where                                     |
+| ----------------- | ----------------------------------------- |
+| Blog post         | `src/content/blog/YYYY-MM-DD-title.md`    |
+| Event             | `src/content/events/YYYY-MM-DD-name.json` |
+| Team member       | `src/content/team/name.json`              |
+| Student group     | `src/content/student-groups/name.json`    |
+| Community links   | `src/content/links/links.json`            |
+| Email, URLs, menu | `src/data/site.ts`                        |
 
-6. **Push to your fork**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+Content is validated when the site builds, so a missing field or a typo in a date fails the build
+with a message pointing to the file.
 
-7. **Create a Pull Request**
-   - Go to the original repository
-   - Click "New Pull Request"
-   - Provide a clear description of your changes
+Please don't invent facts: dates, speakers, numbers and quotes should come from a real source
+(Meetup, the event organisers, a recording).
 
-## 📝 Content Contributions
+## Code changes
 
-### Adding Blog Posts
+- Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) first; it explains the theming, fonts and the
+  hero animation.
+- Use the design tokens in `src/styles/tokens.css` instead of new hard-coded colours, and check
+  both the light and dark themes at phone (390px) and desktop (1440px) widths
+  (`npm run screenshots`).
+- Keep components small and reuse the existing ones in `src/components/`.
+- Use semantic HTML, keep heading levels in order, give meaningful images alt text, and keep
+  everything usable with a keyboard.
+- Images for posts go in `src/assets/blog/` and are optimised at build time.
 
-1. Create a new file in `src/pages/blog/`
-2. Use the format: `YYYY-MM-DD-your-post-title.md`
-3. Include proper frontmatter:
-   ```markdown
-   ---
-   templateKey: blog-post
-   title: Your Post Title
-   date: 2024-12-16T10:00:00.000Z
-   description: Brief description
-   featuredpost: false
-   featuredimage: /img/your-image.jpg
-   tags:
-     - aws
-     - community
-   ---
-   ```
+## Pull requests
 
-### Updating Information
+Use a short, descriptive title with a prefix: `Add:`, `Fix:`, `Update:`, `Docs:` or `Style:`.
+In the description, say what changed and why, and add screenshots for visual changes.
 
-- **About Page**: Edit `src/pages/about/index.md`
-- **Leadership**: Update the leadership section in the about page
-- **Contact Info**: Update contact details as needed
+## Reporting issues
 
-## 🎨 Design Guidelines
+Open a [GitHub issue](https://github.com/awsugmys/awsugmys-website/issues) with what you expected,
+what happened, and steps or a screenshot. For anything else, email
+[awsugmys@gmail.com](mailto:awsugmys@gmail.com).
 
-### Branding
-
-- Use official AWS User Group Mysuru logos
-- Follow the color scheme defined in `src/components/all.sass`
-- Maintain consistency with existing design
-
-### Code Style
-
-- Use Prettier for formatting
-- Follow React best practices
-- Write meaningful component and variable names
-- Add comments for complex logic
-
-### Images
-
-- Optimize images before adding them
-- Use appropriate formats (PNG for logos, JPG for photos)
-- Place images in `static/img/` directory
-
-## 🧪 Testing
-
-Before submitting your contribution:
-
-1. **Test locally**
-   ```bash
-   npm run develop
-   ```
-
-2. **Build successfully**
-   ```bash
-   npm run build
-   ```
-
-3. **Check for errors**
-   - No console errors
-   - All links work
-   - Images load correctly
-   - Responsive design works
-
-## 📋 Pull Request Guidelines
-
-### PR Title Format
-
-Use one of these prefixes:
-- `Add:` for new features
-- `Fix:` for bug fixes
-- `Update:` for updates to existing content
-- `Docs:` for documentation changes
-- `Style:` for styling changes
-
-### PR Description
-
-Include:
-- What changes you made
-- Why you made them
-- Any testing you performed
-- Screenshots (if UI changes)
-
-### Review Process
-
-1. Maintainers will review your PR
-2. Address any feedback or requested changes
-3. Once approved, your PR will be merged
-4. Your changes will be automatically deployed
-
-## 🚀 Development Setup
-
-### Prerequisites
-
-- Node.js (v16+)
-- npm or yarn
-- Git
-
-### Local Development
-
-1. Install dependencies: `npm install`
-2. Start dev server: `npm run develop`
-3. Open `http://localhost:8000`
-
-### Infrastructure (Optional)
-
-If working on infrastructure:
-- Install Terraform
-- Configure AWS CLI
-- See `infrastructure/README.md`
-
-## 🎯 Areas for Contribution
-
-We especially welcome contributions in:
-
-- **Content**: Blog posts, event updates, community news
-- **Features**: New functionality, improvements
-- **Design**: UI/UX improvements, accessibility
-- **Documentation**: Guides, tutorials, API docs
-- **Infrastructure**: Terraform improvements, CI/CD enhancements
-
-## 📞 Getting Help
-
-If you need help:
-
-1. Check existing [documentation](README.md)
-2. Look at [past issues](https://github.com/awsugmys/awsugmys-website/issues)
-3. Ask in our [community channels](README.md#community-links)
-4. Contact the maintainers: [info@awsugmys.in](mailto:info@awsugmys.in)
-
-## 🏆 Recognition
-
-Contributors will be:
-- Listed in our contributors section
-- Mentioned in release notes
-- Recognized in our community channels
-
-Thank you for helping make AWS User Group Mysuru's website better! 🙏
+Everyone taking part is expected to follow the
+[Code of Conduct](https://awsugmys.in/code-of-conduct/).

@@ -1,0 +1,245 @@
+---
+import { Image } from 'astro:assets';
+import { getLinks } from '../../lib/content';
+import FooterSkyline from './FooterSkyline.astro';
+import Icon from '../ui/Icon.astro';
+import logoDark from '../../assets/logos/logo-dark.png';
+import { NAV, SITE } from '../../data/site';
+
+const links = await getLinks();
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <FooterSkyline />
+  <div class="site-footer__body">
+    <div class="container site-footer__grid">
+      <div class="site-footer__brand">
+        <Image
+          src={logoDark}
+          alt="AWS User Group Mysuru"
+          height={48}
+          widths={[114, 228]}
+          sizes="114px"
+          format="webp"
+          loading="lazy"
+          class="site-footer__logo"
+        />
+        <p>A community of AWS builders in Mysuru, learning, sharing and networking since 2025.</p>
+        <p class="site-footer__tagline">{SITE.tagline}</p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2 class="site-footer__heading">Explore</h2>
+        <ul class="site-footer__list">
+          {NAV.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+          <li>
+            <a href="/code-of-conduct/">Code of Conduct</a>
+          </li>
+          <li>
+            <a href="/rss.xml">RSS feed</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2 class="site-footer__heading">Connect</h2>
+        <ul class="site-footer__social">
+          {links.map(({ data }) => (
+            <li>
+              <a href={data.url} rel="noopener" target="_blank">
+                <Icon name={data.icon} size={18} />
+                <span class="visually-hidden">{data.label} (opens in a new tab)</span>
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href={SITE.repoUrl} rel="noopener" target="_blank">
+              <Icon name="github" size={18} />
+              <span class="visually-hidden">Website source on GitHub (opens in a new tab)</span>
+            </a>
+          </li>
+        </ul>
+        <p class="site-footer__mail">
+          <Icon name="mail" size={18} />
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </p>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Speak at a meetup</h2>
+        <p>Have a story about building on AWS? We'd love to hear it.</p>
+        <p class="site-footer__cta">
+          <a href={SITE.speakerFormUrl} rel="noopener" target="_blank">
+            Submit a talk proposal <Icon name="external" size={14} />
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="container site-footer__legal">
+      <p class="site-footer__built">
+        Built with <Icon name="heart" size={14} label="love" class="site-footer__heart" /> by{' '}
+        {SITE.name} · © {year}
+      </p>
+      <!-- REVIEW: disclaimer wording to be confirmed by the organisers. -->
+      <p class="site-footer__disclaimer">
+        {SITE.name} is an independent, volunteer-run community group. This is not an official Amazon
+        Web Services (AWS) website, and views expressed here are not those of AWS. AWS and related
+        marks are trademarks of Amazon.com, Inc. or its affiliates.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-8);
+    color: var(--c-footer-text);
+  }
+
+  .site-footer__body {
+    background: var(--c-footer-bg);
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  }
+
+  @media (min-width: 64rem) {
+    .site-footer__grid {
+      grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    }
+  }
+
+  .site-footer__logo {
+    width: auto;
+    height: 48px;
+    margin-bottom: var(--space-3);
+  }
+
+  .site-footer__brand p {
+    max-width: 22rem;
+    color: var(--c-footer-muted);
+  }
+
+  .site-footer__tagline {
+    margin-top: var(--space-3);
+    font-weight: 700;
+    color: #ffb84d !important;
+  }
+
+  .site-footer__heading {
+    margin-bottom: var(--space-3);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+
+  .site-footer p {
+    color: var(--c-footer-muted);
+  }
+
+  .site-footer a {
+    color: var(--c-footer-text);
+  }
+
+  .site-footer a:hover {
+    color: #ffffff;
+  }
+
+  .site-footer__list {
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__list li + li {
+    margin-top: var(--space-1);
+  }
+
+  .site-footer__list a {
+    text-decoration: none;
+  }
+
+  .site-footer__list a:hover {
+    text-decoration: underline;
+  }
+
+  .site-footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__social a {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-radius: 999px;
+    transition:
+      border-color 0.2s,
+      background-color 0.2s;
+  }
+
+  .site-footer__social a:hover {
+    border-color: var(--c-accent);
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  .site-footer__mail {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .site-footer__cta {
+    margin-top: var(--space-2);
+    font-weight: 700;
+  }
+
+  .site-footer__cta a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: #ffb84d;
+  }
+
+  .site-footer__legal {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+    font-size: var(--step--1);
+  }
+
+  .site-footer__built {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .site-footer :global(.site-footer__heart) {
+    display: inline;
+    color: #ff9900;
+  }
+
+  .site-footer__disclaimer {
+    margin-top: var(--space-2);
+    max-width: 60rem;
+  }
+</style>

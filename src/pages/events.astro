@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import EventCard from '../components/cards/EventCard.astro';
+import EventComingSoon from '../components/cards/EventComingSoon.astro';
+import { eventSchema, getEvents } from '../lib/content';
+
+const { upcoming, past } = await getEvents();
+---
+
+<BaseLayout
+  title="Events"
+  description="Upcoming and past AWS User Group Mysuru meetups, workshops and online sessions."
+  jsonLd={[...upcoming, ...past].map(eventSchema)}
+>
+  <header class="page-hero container">
+    <span class="eyebrow">Events</span>
+    <h1>Meetups & workshops</h1>
+    <p>
+      Talks, hands-on labs and community get-togethers — in Mysuru, around Karnataka and online.
+    </p>
+  </header>
+
+  <Section id="upcoming" title="Upcoming">
+    {upcoming.length ? (
+      <div class="event-list">
+        {upcoming.map((event) => (
+          <EventCard event={event} />
+        ))}
+      </div>
+    ) : (
+      <EventComingSoon />
+    )}
+  </Section>
+
+  <Section id="past" tone="alt" title="Past events">
+    {past.length ? (
+      <div class="event-list">
+        {past.map((event) => (
+          <EventCard event={event} />
+        ))}
+      </div>
+    ) : (
+      <p class="muted">Our story is just beginning — past events will appear here.</p>
+    )}
+  </Section>
+</BaseLayout>
+
+<style>
+  .event-list {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 64rem) {
+    .event-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import type { Page } from 'astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  page: Page<unknown>;
+}
+const { page } = Astro.props;
+---
+
+{page.lastPage > 1 && (
+  <nav class="pagination" aria-label="Blog pages">
+    {page.url.prev ? (
+      <a href={page.url.prev} rel="prev" class="btn btn--ghost">
+        <Icon name="arrow" class="flip" /> Newer posts
+      </a>
+    ) : (
+      <span />
+    )}
+    <span class="muted">
+      Page {page.currentPage} of {page.lastPage}
+    </span>
+    {page.url.next ? (
+      <a href={page.url.next} rel="next" class="btn btn--ghost">
+        Older posts <Icon name="arrow" />
+      </a>
+    ) : (
+      <span />
+    )}
+  </nav>
+)}
+
+<style>
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-top: var(--space-7);
+  }
+
+  .pagination :global(.flip) {
+    transform: scaleX(-1);
+  }
+</style>

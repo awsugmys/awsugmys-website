@@ -1,208 +1,216 @@
-# AWS User Group Mysuru Website
+# AWS User Group Mysuru — website
 
-Official Website of AWS User Group Mysuru:
-<img width="3000" height="3000" alt="AWS-White" src="https://github.com/user-attachments/assets/f3b2882f-7848-4e68-8708-ecda70dce059" />
+The community website for **AWS User Group Mysuru** ([awsugmys.in](https://awsugmys.in)): meetups,
+workshops, blog, student builder groups and how to get involved. The home page shows the Mysore
+Palace (day or night, following your theme) with a ceremonial Dasara elephant walking past.
 
-## 🌟 About
+It's a fully static site built with [Astro](https://astro.build): plain HTML/CSS with a few tiny
+scripts, no server, no database and no trackers. `npm run build` produces a self-contained
+`dist/` folder.
 
-This is the official website for AWS User Group Mysuru, a community of passionate AWS developers, solution architects, DevOps engineers, and cloud enthusiasts in Mysuru, Karnataka, India.
+## Quick start
 
-🌐 **Live Website**: [awsugmys.in](https://awsugmys.in)
+Requires **Node.js 22.22+** (see `.nvmrc`).
 
-## 🚀 Quick Start
+```bash
+npm ci            # install the exact dependency versions from package-lock.json
+npm run dev       # http://localhost:4321, reloads as you edit
+npm run build     # type-check + production build into dist/
+npm run preview   # serve dist/ locally
+npm run check     # type-check, lint and formatting check (run before opening a PR)
+```
 
-### Prerequisites
+Most changes are content edits: see [Editing content](#editing-content) below.
 
-- Node.js (v16 or higher)
-- npm or yarn
-- Git
+### Setting up on another machine
 
-### Local Development
+Clone the repository (or copy the folder **without** `node_modules/`, `dist/` and `.astro/`),
+then run `npm ci`. `node_modules/` contains platform-specific binaries (sharp, esbuild, Rollup),
+so a copy from another computer can fail; `npm ci` installs the right ones. The build is
+reproducible: a fresh clone produces a byte-identical `dist/`.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/awsugmys/awsugmys-website.git
-   cd awsugmys-website
-   ```
+Only needed for some scripts: `npx playwright install chromium` (screenshots, social image,
+gait check), and the git-ignored `fonts/` and `reference/` folders (regenerating fonts and hero
+artwork).
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+## Project map
 
-3. **Start developing**
-   ```bash
-   npm run develop
-   ```
+```
+.
+├── src/
+│   ├── pages/              One file per URL (index, about, events, blog, student-builders, …)
+│   ├── content/            Site content, edited via pull requests
+│   │   ├── blog/             Blog posts (Markdown)
+│   │   ├── events/           Meetups and workshops (one JSON file per event)
+│   │   ├── team/             Organising team (one JSON file per person)
+│   │   ├── student-groups/   AWS Student Builder Groups (one JSON file per group)
+│   │   └── links/            Community links (Meetup, Luma, LinkedIn, …)
+│   ├── content.config.ts   Schemas that validate the content above
+│   ├── components/
+│   │   ├── layout/           Header, footer, logo, theme toggle, footer skyline
+│   │   ├── hero/             Home page hero and the animated palace scene
+│   │   ├── cards/            Event, blog post and team cards
+│   │   ├── ui/               Icons, sections, pagination, call-to-action panel
+│   │   └── seo/              Meta tags and structured data
+│   ├── layouts/            Page shells (BaseLayout, PostLayout)
+│   ├── lib/                Helpers: content queries, fonts, hero backgrounds, structured data
+│   ├── data/site.ts        Site name, email, URLs and navigation
+│   ├── styles/             Design tokens (tokens.css) and global styles
+│   └── assets/             Images processed at build time (logos, hero artwork, blog images)
+├── public/                 Files served as-is (favicons, fonts, social image, robots.txt)
+├── logos/                  Official AWS UG Mysuru logo files (source of truth; don't edit)
+├── scripts/                Asset generation and checks (see "Regenerating assets")
+│   ├── brand/                Logos/favicons, web fonts, social preview image
+│   ├── hero/                 Hero artwork pipeline and its checks
+│   └── take-screenshots.mjs
+├── docs/                   Architecture, deployment and branding guides
+├── infrastructure/         Terraform for AWS hosting (S3, CloudFront, certificate, DNS, deploy role)
+└── .github/workflows/      CI for pull requests; deploy on merge to main
+```
 
-4. **Open your browser**
-   
-   Your site is now running at `http://localhost:8000`!
+## Editing content
 
-## 🏗️ Architecture
+### Add a blog post
 
-This website is built with modern web technologies:
-
-- **Gatsby** - Static site generator for React
-- **React** - UI library
-- **Bulma** - CSS framework for responsive design
-- **GitHub Actions** - CI/CD pipeline
-- **AWS S3** - Static website hosting
-- **AWS CloudFront** - Global CDN
-- **Terraform** - Infrastructure as Code
-
-## 🎨 Branding
-
-The website uses the official AWS User Group Mysuru branding:
-
-- **Primary Logo**: Black background with purple text (`Black-Purple.png`)
-- **Alternative Logo**: White background with purple text (`White-Purple.png`)
-- **Usage Guidelines**: See [BRANDING.md](BRANDING.md) for detailed guidelines
-
-## 📝 Content Management
-
-### Adding Blog Posts
-
-Create new blog posts in `src/pages/blog/` using this format:
+Create `src/content/blog/YYYY-MM-DD-your-post-title.md`. The filename becomes the URL
+(`/blog/YYYY-MM-DD-your-post-title/`).
 
 ```markdown
 ---
-templateKey: blog-post
 title: Your Post Title
-date: 2024-12-16T10:00:00.000Z
-description: Brief description of your post
+date: 2026-11-20T10:00:00.000Z
+description: One or two sentences shown on cards and in search results.
 featuredpost: false
-featuredimage: /img/your-image.jpg
+featuredimage: my-photo.jpg # optional — put the file in src/assets/blog/
 tags:
   - aws
   - community
-  - mysuru
 ---
 
-Your blog content here...
+Your post in Markdown. `.mdx` works too.
 ```
 
-### Updating About Page
+- Don't repeat the title as a `#` heading; the page already shows it.
+- Add `draft: true` to keep a post out of production builds.
+- Without a `featuredimage`, cards show a palace skyline illustration.
 
-Edit `src/pages/about/index.md` to update:
-- Leadership team information
-- Contact details
-- Community information
+### Add an event
 
-## 🚀 Deployment
+Create `src/content/events/YYYY-MM-DD-short-name.json`:
 
-### Infrastructure Setup
-
-The AWS infrastructure is managed with Terraform:
-
-1. **Prerequisites**
-   - AWS CLI configured
-   - Terraform installed
-
-2. **Deploy Infrastructure**
-   ```bash
-   cd infrastructure
-   ./deploy-infrastructure.sh
-   ```
-
-3. **Configure GitHub Actions**
-   
-   Add these secrets to your GitHub repository settings:
-   - `AWS_ACCESS_KEY_ID`
-   - `AWS_SECRET_ACCESS_KEY`
-   - `AWS_REGION`
-   - `S3_BUCKET_NAME`
-   - `CLOUDFRONT_DISTRIBUTION_ID`
-
-### Automatic Deployment
-
-The website automatically deploys when you push to the `main` branch:
-
-1. GitHub Actions builds the site
-2. Deploys to S3
-3. Invalidates CloudFront cache
-4. Site is live at [awsugmys.in](https://awsugmys.in)
-
-## 📁 Project Structure
-
-```
-awsugmys-website/
-├── src/
-│   ├── components/          # React components
-│   ├── pages/              # Page content (markdown & React)
-│   ├── templates/          # Page templates
-│   └── img/               # Source images
-├── static/
-│   └── img/               # Static images
-├── infrastructure/         # Terraform configuration
-├── .github/
-│   └── workflows/         # GitHub Actions
-├── scripts/               # Utility scripts
-└── docs/                  # Documentation
+```json
+{
+  "title": "AWS User Group Mysuru Meetup #5",
+  "date": "2026-11-29",
+  "startTime": "10:00",
+  "endTime": "13:00",
+  "format": "in-person",
+  "venue": { "name": "Venue name", "city": "Mysuru", "address": "Optional street address" },
+  "speakers": [
+    { "name": "Speaker Name", "title": "Optional title", "url": "https://linkedin.com/in/..." }
+  ],
+  "description": "What the session is about.",
+  "registrationUrl": "https://www.meetup.com/awsugmys/events/...",
+  "slidesUrl": "https://... (optional, add after the event)",
+  "recordingUrl": "https://youtube.com/... (optional)",
+  "materialsUrl": "https://github.com/... (optional: workshop code/labs)",
+  "alternateUrl": "https://... (optional: second listing, e.g. on another platform)",
+  "blogPost": "2026-11-29-meetup-5-recap (optional: id of a related blog post)"
+}
 ```
 
-## 🛠️ Development
+- Times are 24-hour **IST**. `format` is `in-person`, `online` or `hybrid` (omit `venue` for online).
+- Multi-day events: add `"endDate": "YYYY-MM-DD"`. Informal gatherings can carry a `"note"`.
+- The registration button names the platform automatically (Meetup, AWS Builder Center, Luma).
+- Events are split into _Upcoming_ and _Past_ **at build time**, so the site needs a rebuild after
+  an event to move it to _Past_.
 
-### Available Scripts
+### Edit team members
 
-- `npm run develop` - Start development server
-- `npm run build` - Build for production
-- `npm run serve` - Serve production build locally
-- `npm run clean` - Clean cache and public folders
+One JSON file per person in `src/content/team/`:
 
-### Adding New Features
+```json
+{
+  "name": "Full Name",
+  "role": "Co-Organiser",
+  "linkedin": "https://www.linkedin.com/in/...",
+  "order": 7,
+  "photo": "./photos/full-name.jpg",
+  "bio": "Optional one-liner."
+}
+```
 
-1. Create feature branch: `git checkout -b feature/your-feature`
-2. Make changes and test locally
-3. Commit changes: `git commit -m "Add your feature"`
-4. Push branch: `git push origin feature/your-feature`
-5. Create Pull Request
+`order` sets the position. `photo` and `bio` are optional (without a photo, initials are shown in
+a circle). Put photos next to the JSON, e.g. `src/content/team/photos/`.
 
-## 🤝 Contributing
+### Student Builder Groups
 
-We welcome contributions from the community! Please:
+One JSON file per group in `src/content/student-groups/`:
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+```json
+{
+  "name": "AWS SBG at Vidyavardhaka College of Engineering",
+  "institution": "Vidyavardhaka College of Engineering",
+  "shortName": "VVCE",
+  "area": "Mysuru",
+  "location": "Gokulam, Mysuru",
+  "leader": "Leader Name (optional)",
+  "meetupUrl": "https://www.meetup.com/aws-sbg-at-.../",
+  "order": 1
+}
+```
 
-### Code Style
+`area` is `Mysuru` or `Mandya`.
 
-- Use Prettier for code formatting
-- Follow React best practices
-- Write meaningful commit messages
-- Update documentation as needed
+### Community links, email and site details
 
-## 👥 Leadership Team
+- Community links (Meetup, Luma, LinkedIn, Twitter/X, Facebook): `src/content/links/links.json`.
+  They appear in the footer, on Get Involved and in the site's structured data.
+- Email address, speaker form, Meetup/LinkedIn URLs, site description and navigation:
+  `src/data/site.ts`.
 
-- **Yeshwanth L M** - Lead ([LinkedIn](https://www.linkedin.com/in/yeshwanth-l-m/))
-- **Girish A R** - Co-Organiser ([LinkedIn](https://www.linkedin.com/in/girish-a-r-a16aa3159/))
-- **Aniruddh Koundinya** - Co-Organiser ([LinkedIn](https://www.linkedin.com/in/aniruddhkoundinya/))
+### Change theme colours
 
-## 📞 Contact
+All design tokens live in `src/styles/tokens.css`. Colours use `light-dark(<light>, <dark>)`:
 
-- **Email**: [info@awsugmys.in](mailto:info@awsugmys.in)
-- **Speaker Form**: [Submit a talk proposal](https://forms.gle/uMkLMM4uJtVZ4iY3A)
+```css
+--c-link: light-dark(#6a3fc2, #c9a8ff); /* AWS UG purple; lighter on dark */
+```
 
-## 🔗 Community Links
+Change a value there and every component follows. Keep text and button colours at WCAG AA
+contrast (4.5:1 for body text).
 
-- [Meetup Group](https://www.meetup.com/awsugmys/)
-- [LinkedIn](https://www.linkedin.com/company/awsugmys)
-- [Twitter](https://www.twitter.com/awsugmys)
-- [Facebook](https://www.facebook.com/awsugmys/)
+## Regenerating assets
 
-## 📄 License
+Generated assets are committed, so you only need these when the source changes.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+| Command                        | When to run it                                     | Needs                                                                       |
+| ------------------------------ | -------------------------------------------------- | --------------------------------------------------------------------------- |
+| `npm run assets:logos`         | Logo files in `logos/` changed                     | —                                                                           |
+| `npm run assets:fonts`         | Updating the Amazon Ember web fonts                | Amazon type library package in `fonts/` (not in git)                        |
+| `npm run assets:hero`          | Hero illustrations changed                         | `reference/elephant.png`, `palace-day.png`, `palace-night.png` (not in git) |
+| `npm run assets:social-image`  | Hero or branding changed (social preview image)    | `npm run build && npm run preview` running                                  |
+| `npm run check:hero-alignment` | After `assets:hero`: day/night palace must line up | —                                                                           |
+| `npm run check:hero-gait`      | After changing the elephant's size or speed        | `npm run preview` running                                                   |
+| `npm run screenshots`          | Visual review in light/dark at 390px and 1440px    | `npm run preview` running                                                   |
+| `npm run check:cdn-routing`    | After changing `infrastructure/functions/`         | `npm run build` (tests every page's URL against the CloudFront Function)    |
 
-## 🙏 Acknowledgments
+How the fonts, hero animation and theming work is explained in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-- AWS User Group Kochi for inspiration
-- AWS Community for support
-- All contributors and community members
+## Deployment
 
----
+The site is hosted on AWS (private S3 bucket + CloudFront, certificate and DNS in the existing
+`awsugmys.in` Route 53 zone) and deployed by GitHub Actions on every merge to `main`. See
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the design and
+[infrastructure/README.md](infrastructure/README.md) to set it up.
 
-**Built with ❤️ by AWS User Group Mysuru**
+## Contributing
+
+Pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md) and the
+[Code of Conduct](https://awsugmys.in/code-of-conduct/).
+
+## Licence
+
+Code: MIT, see [LICENSE](LICENSE). Logos belong to AWS User Group Mysuru. Amazon Ember fonts are
+owned by Amazon. AWS and related marks are trademarks of Amazon.com, Inc. or its affiliates.

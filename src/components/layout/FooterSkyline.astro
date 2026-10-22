@@ -1,0 +1,31 @@
+---
+// Footer skyline: the Mysore Palace silhouette (traced from the palace
+// illustration by scripts/hero/build-hero-assets.mjs) rising out of the footer, flanked by
+// a low boundary wall. The palace always fits the strip's height (never cropped);
+// the wall is a separate full-width band so it reaches both edges at any width.
+import outline from '../../assets/hero/palace-outline.json';
+
+const WALL_H = 34; // wall height, in outline units
+---
+
+<div class="skyline" aria-hidden="true" style={`--wall: ${(WALL_H / outline.height) * 100}%`}>
+  <svg viewBox={`0 0 ${outline.width} ${outline.height}`} focusable="false">
+    <path d={outline.d} fill="var(--c-footer-bg)"></path>
+  </svg>
+</div>
+
+<style>
+  .skyline {
+    display: flex;
+    justify-content: center;
+    height: clamp(72px, 9vw, 120px);
+    margin-bottom: -1px;
+    background: linear-gradient(to top, var(--c-footer-bg) var(--wall), transparent var(--wall));
+  }
+
+  .skyline svg {
+    display: block;
+    width: auto;
+    height: 100%;
+  }
+</style>

@@ -1,0 +1,16 @@
+{
+  "title": "AWS Cloud + DevOps Workshop @ Amrita Vishwa Vidyapeetham, Mysuru",
+  "date": "2026-10-09",
+  "format": "in-person",
+  "venue": { "name": "Amrita Vishwa Vidyapeetham, Mysuru Campus", "city": "Mysuru" },
+  "speakers": [
+    {
+      "name": "Yeshwanth L M",
+      "title": "Data & AI Solutions Engineer/Architect",
+      "url": "https://www.linkedin.com/in/yeshwanth-l-m/"
+    }
+  ],
+  "description": "A hands-on workshop with no prior cloud experience needed: host a website on a real cloud server (Amazon EC2), automate deployments with a GitHub Actions CI/CD pipeline, and package the app as a Docker container published to Docker Hub.",
+  "slidesUrl": "https://github.com/user-attachments/files/33230761/AWS.CloudDevOps.Workshop.Amrita.pdf",
+  "materialsUrl": "https://github.com/yeshwanthlm/AWS-Cloud-DevOps-Workshop-Amrita"
+}

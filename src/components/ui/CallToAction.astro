@@ -1,0 +1,104 @@
+---
+// Call-to-action panel: squid-ink navy (the same in both themes) with a faint
+// Mysore Palace skyline along the bottom edge.
+import Icon from './Icon.astro';
+import { SITE } from '../../data/site';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Join the community',
+  text = "Whether you're just starting with AWS or you're a seasoned cloud architect, there's a place for you here.",
+} = Astro.props;
+---
+
+<section class="container join-band-wrap" aria-labelledby="join-band-title">
+  <div class="join-band">
+    <div class="join-band__copy">
+      <h2 id="join-band-title">{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="btn-row join-band__ctas">
+      <a class="btn btn--primary" href={SITE.meetupUrl} rel="noopener" target="_blank">
+        <Icon name="meetup" /> Join on Meetup
+        <span class="visually-hidden"> (opens in a new tab)</span>
+      </a>
+      <a class="btn btn--on-dark" href={SITE.linkedinUrl} rel="noopener" target="_blank">
+        <Icon name="linkedin" /> LinkedIn<span class="visually-hidden"> (opens in a new tab)</span>
+      </a>
+      <a class="btn btn--on-dark" href="/get-involved/">
+        <Icon name="mic" /> Get involved
+      </a>
+    </div>
+    <div class="join-band__skyline" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .join-band-wrap {
+    margin-top: var(--space-7);
+  }
+
+  .join-band {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+    overflow: hidden;
+    padding: var(--space-7) clamp(1.5rem, 4vw, 3rem) clamp(5rem, 9vw, 6.5rem);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(40rem 20rem at 100% 0%, rgb(173 127 246 / 0.25), transparent 70%),
+      linear-gradient(135deg, #232f3e, #16191f);
+    color: #d5dbe1;
+  }
+
+  @media (min-width: 56rem) {
+    .join-band {
+      grid-template-columns: 1.2fr auto;
+    }
+  }
+
+  .join-band h2 {
+    color: #ffffff;
+  }
+
+  .join-band__copy p {
+    max-width: 34rem;
+    margin-top: var(--space-3);
+    color: #aab4bf;
+    font-size: var(--step-1);
+  }
+
+  .join-band__skyline {
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    bottom: 0;
+    width: min(100%, 52rem);
+    aspect-ratio: 1000 / 340;
+    translate: -50% 0;
+    background: #ffffff;
+    mask: url('/palace-silhouette.svg') center bottom / 100% auto no-repeat;
+    opacity: 0.06;
+  }
+
+  .btn--on-dark {
+    border-color: rgb(255 255 255 / 0.35);
+    color: #ffffff;
+  }
+
+  .btn--on-dark:hover {
+    border-color: #ffffff;
+    color: #ffffff;
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  .join-band :focus-visible {
+    outline-color: #ffb84d;
+  }
+</style>

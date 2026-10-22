@@ -1,0 +1,80 @@
+{
+  "parts": [
+    {
+      "name": "leg-far-front",
+      "group": "a",
+      "left": 38.245,
+      "top": 74.272,
+      "width": 10.493,
+      "height": 22.977,
+      "originX": 73.77,
+      "originY": 9.859
+    },
+    {
+      "name": "leg-near-front",
+      "group": "b",
+      "left": 46.158,
+      "top": 76.429,
+      "width": 11.009,
+      "height": 22.06,
+      "originX": 59.896,
+      "originY": 10.269
+    },
+    {
+      "name": "leg-far-back",
+      "group": "b",
+      "left": 82.454,
+      "top": 87.54,
+      "width": 6.823,
+      "height": 8.63,
+      "originX": 52.101,
+      "originY": 26.25
+    },
+    {
+      "name": "leg-near-back",
+      "group": "a",
+      "left": 86.181,
+      "top": 80.744,
+      "width": 11.583,
+      "height": 18.015,
+      "originX": 75.248,
+      "originY": 12.575
+    },
+    {
+      "name": "trunk",
+      "group": null,
+      "left": 27.58,
+      "top": 81.823,
+      "width": 7.339,
+      "height": 14.779,
+      "originX": 39.844,
+      "originY": 15.328
+    },
+    {
+      "name": "tail",
+      "group": null,
+      "left": 96.904,
+      "top": 72.114,
+      "width": 1.72,
+      "height": 17.152,
+      "originX": 56.667,
+      "originY": 13.208
+    },
+    {
+      "name": "umbrella",
+      "group": null,
+      "left": 59.404,
+      "top": 1.294,
+      "width": 25.975,
+      "height": 20.604,
+      "originX": 49.227,
+      "originY": 99.476
+    }
+  ],
+  "aspect": 0.9407,
+  "lamp": {
+    "x": 69.094,
+    "y": 34.736
+  },
+  "groundY": 98.759
+}

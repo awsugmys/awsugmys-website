@@ -1,0 +1,72 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/cards/PostCard.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { getPosts, getTags, type Post } from '../../lib/content';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getPosts();
+  const tags = await getTags();
+  return paginate(posts, { pageSize: 10, props: { tags } });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<Post>;
+  tags: Awaited<ReturnType<typeof getTags>>;
+}
+
+const { page, tags } = Astro.props;
+const title = page.currentPage === 1 ? 'Blog' : `Blog — page ${page.currentPage}`;
+---
+
+<BaseLayout
+  title={title}
+  description="Event announcements, session write-ups and community news from AWS User Group Mysuru."
+>
+  <header class="page-hero container">
+    <span class="eyebrow">Blog</span>
+    <h1>Stories from the community</h1>
+    <p>Announcements, recaps and ideas from our meetups and members.</p>
+  </header>
+
+  <div class="container">
+    <nav class="blog-tags" aria-label="Browse by tag">
+      <Icon name="tag" size={18} />
+      <ul class="tag-list">
+        {tags.slice(0, 10).map((t) => (
+          <li>
+            <a class="tag" href={`/tags/${t.slug}/`}>
+              #{t.tag} <span class="visually-hidden">({t.count} posts)</span>
+            </a>
+          </li>
+        ))}
+        <li>
+          <a class="tag" href="/tags/">
+            All tags
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="grid">
+      {page.data.map((post, i) => (
+        <PostCard post={post} headingLevel="h2" eager={i < 2} />
+      ))}
+    </div>
+
+    <Pagination page={page} />
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-tags {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+    color: var(--c-accent-text);
+  }
+</style>

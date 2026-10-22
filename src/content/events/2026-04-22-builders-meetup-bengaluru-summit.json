@@ -1,0 +1,16 @@
+{
+  "title": "The Builders Meetup @ AWS Summit Bengaluru",
+  "date": "2026-04-22",
+  "endDate": "2026-04-23",
+  "format": "in-person",
+  "venue": {
+    "name": "KTPO Convention Centre, Whitefield (main lunch area)",
+    "city": "Bengaluru"
+  },
+  "speakers": [],
+  "description": "A casual meet & greet and lunch for AWS UG Mysuru community members attending AWS Summit Bengaluru.",
+  "note": "Informal, voluntary gathering inside the Summit \u2014 not an officially organised AWS UG Mysuru event. A registered Summit attendee pass is required for entry.",
+  "registrationUrl": "https://www.meetup.com/awsugmys/events/314240533/",
+  "blogPost": "2026-04-22-builders-meetup-bengaluru-summit",
+  "startTime": "10:00"
+}

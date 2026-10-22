@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Icon from '../components/ui/Icon.astro';
+import { getLinks } from '../lib/content';
+import { SITE } from '../data/site';
+
+const links = await getLinks();
+---
+
+<BaseLayout
+  title="Get involved"
+  description="Join AWS User Group Mysuru on Meetup, LinkedIn, X and Facebook, propose a talk, volunteer or sponsor an event."
+>
+  <header class="page-hero container">
+    <span class="eyebrow">Get involved</span>
+    <h1>Walk with the procession</h1>
+    <p>
+      Whether you're just starting with AWS or you're a seasoned cloud architect, there's a place
+      for you here.
+    </p>
+  </header>
+
+  <Section id="join" title="Join the community" intro="Follow along wherever you hang out online.">
+    <ul class="join-grid">
+      {links.map(({ data }) => (
+        <li class="card card--interactive join-card">
+          <span class="join-card__icon">
+            <Icon name={data.icon} size={24} />
+          </span>
+          <h3>
+            <a class="card-link" href={data.url} rel="noopener" target="_blank">
+              {data.label}
+              <span class="visually-hidden"> (opens in a new tab)</span>
+            </a>
+          </h3>
+          {data.blurb && <p class="muted">{data.blurb}</p>}
+          <span class="join-card__cta" aria-hidden="true">
+            Visit <Icon name="external" size={16} />
+          </span>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section id="contribute" tone="alt" title="Lend a hand">
+    <div class="ways">
+      <article class="card way">
+        <Icon name="mic" size={28} class="way__icon" />
+        <h3>Speak at a meetup</h3>
+        <p>
+          Share what you've built, broken or learned on AWS. First-time speakers are very welcome —
+          we're happy to help you shape your talk.
+        </p>
+        <a class="btn btn--primary" href={SITE.speakerFormUrl} rel="noopener" target="_blank">
+          Submit a talk proposal<span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      </article>
+
+      <article class="card way">
+        <Icon name="users" size={28} class="way__icon" />
+        <h3>Volunteer or host</h3>
+        <p>
+          Help us run events, welcome newcomers, or host a meetup at your campus or office. Tell us
+          a little about yourself and we'll be in touch.
+        </p>
+        <a
+          class="btn btn--ghost"
+          href={`mailto:${SITE.email}?subject=Volunteering%20with%20AWS%20UG%20Mysuru`}
+        >
+          Email the organisers
+        </a>
+      </article>
+
+      <article class="card way">
+        <Icon name="heart" size={28} class="way__icon" />
+        <h3>Sponsor an event</h3>
+        <p>
+          Venues, refreshments and swag help us keep events free and welcoming. Reach out to talk
+          about supporting the community.
+        </p>
+        <a
+          class="btn btn--ghost"
+          href={`mailto:${SITE.email}?subject=Sponsoring%20AWS%20UG%20Mysuru`}
+        >
+          Talk to us about sponsoring
+        </a>
+      </article>
+
+      <article class="card way">
+        <Icon name="github" size={28} class="way__icon" />
+        <h3>Improve this website</h3>
+        <p>
+          The site is open source. Add a blog post, fix a typo or suggest an improvement with a pull
+          request.
+        </p>
+        <a class="btn btn--ghost" href={SITE.repoUrl} rel="noopener" target="_blank">
+          View on GitHub<span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      </article>
+    </div>
+  </Section>
+
+  <Section id="contact" title="Contact" narrow>
+    <p class="contact-line">
+      <Icon name="mail" size={22} />
+      Drop a mail to <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+    </p>
+    <p class="muted">
+      Please read our <a href="/code-of-conduct/">Code of Conduct</a> before joining an event.
+    </p>
+  </Section>
+</BaseLayout>
+
+<style>
+  .join-grid {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  }
+
+  .join-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-5);
+  }
+
+  .join-card__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3.4rem;
+    margin-bottom: var(--space-2);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-arch);
+    color: var(--c-heading);
+    background: var(--c-bg-alt);
+  }
+
+  .join-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: auto;
+    padding-top: var(--space-2);
+    color: var(--c-link);
+    font-weight: 600;
+  }
+
+  .ways {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  }
+
+  .way {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-5);
+  }
+
+  .way p {
+    flex: 1;
+  }
+
+  .way :global(.way__icon) {
+    color: var(--c-accent-text);
+  }
+
+  .contact-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    font-size: var(--step-1);
+  }
+
+  .contact-line :global(svg) {
+    color: var(--c-accent-text);
+  }
+</style>

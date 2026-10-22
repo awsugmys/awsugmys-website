@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "icon": {
+            "type": "string",
+            "enum": [
+              "meetup",
+              "luma",
+              "linkedin",
+              "x",
+              "facebook",
+              "github",
+              "youtube"
+            ]
+          },
+          "blurb": {
+            "type": "string"
+          },
+          "order": {
+            "default": 99,
+            "type": "number"
+          }
+        },
+        "required": [
+          "label",
+          "url",
+          "icon"
+        ]
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "icon": {
+            "type": "string",
+            "enum": [
+              "meetup",
+              "luma",
+              "linkedin",
+              "x",
+              "facebook",
+              "github",
+              "youtube"
+            ]
+          },
+          "blurb": {
+            "type": "string"
+          },
+          "order": {
+            "default": 99,
+            "type": "number"
+          }
+        },
+        "required": [
+          "label",
+          "url",
+          "icon"
+        ]
+      }
+    }
+  ]
+}

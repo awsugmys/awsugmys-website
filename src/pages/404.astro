@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import { Image } from 'astro:assets';
+import { palaceDay, palaceNight } from '../lib/hero-backgrounds';
+import { NAV } from '../data/site';
+---
+
+<BaseLayout title="Page not found" description="This page has wandered off." noindex>
+  <section class="lost container--narrow">
+    <div class="lost__art">
+      <Image
+        src={palaceDay}
+        alt="The Mysore Palace by day, with crowds waiting, but no elephant in sight"
+        widths={[720, 1200]}
+        sizes="(min-width: 48rem) 46rem, 100vw"
+        class="day-only"
+      />
+      <Image
+        src={palaceNight}
+        alt="The illuminated Mysore Palace at night, with crowds waiting, but no elephant in sight"
+        widths={[720, 1200]}
+        sizes="(min-width: 48rem) 46rem, 100vw"
+        class="night-only"
+      />
+    </div>
+    <span class="eyebrow">Error 404</span>
+    <h1>The elephant has wandered off</h1>
+    <p class="muted">
+      The crowd is waiting, but the page you're looking for isn't on the procession route. It may
+      have moved, or the link might be mistyped.
+    </p>
+    <div class="btn-row lost__ctas">
+      <a class="btn btn--primary" href="/">
+        <Icon name="arrow" class="flip" /> Back to the palace
+      </a>
+      <a class="btn btn--ghost" href="/events/">
+        See upcoming events
+      </a>
+    </div>
+    <nav aria-label="Popular pages" class="lost__nav">
+      <ul>
+        {NAV.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </section>
+</BaseLayout>
+
+<style>
+  .lost {
+    padding-top: var(--space-7);
+    text-align: center;
+  }
+
+  .lost__art {
+    margin-bottom: var(--space-5);
+  }
+
+  .lost__art :global(img) {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    object-position: center 80%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .lost h1 {
+    margin-top: var(--space-3);
+    font-size: var(--step-3);
+  }
+
+  .lost p {
+    margin-top: var(--space-4);
+  }
+
+  .lost__ctas {
+    justify-content: center;
+    margin-top: var(--space-5);
+  }
+
+  .lost__ctas :global(.flip) {
+    transform: scaleX(-1);
+  }
+
+  .lost__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    padding: 0;
+    list-style: none;
+  }
+</style>

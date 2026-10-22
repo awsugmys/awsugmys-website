@@ -1,0 +1,549 @@
+---
+// Full-bleed Jamboo Savari scene: the Mysore Palace illustration (day or
+// night, following the theme) with the ceremonial elephant walking past.
+//
+// Assets come from scripts/hero/build-hero-assets.mjs: the palace backgrounds and the
+// elephant sliced into a base plus moving parts (legs, trunk, tail, umbrella).
+// Each part sits at its original position, so the still frame matches the
+// source artwork exactly; CSS animates a walk cycle on top.
+//
+// Performance: the palace is a CSS background chosen per theme, so only the
+// active image downloads. Travel and limbs are transform-only animations on
+// separate layers, paused off-screen, in hidden tabs and for reduced motion.
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import manifest from '../../assets/hero/elephant/manifest.json';
+import base from '../../assets/hero/elephant/base.png';
+import { heroBackgrounds } from '../../lib/hero-backgrounds';
+
+const partFiles = import.meta.glob<{ default: ImageMetadata }>('../../assets/hero/elephant/*.png', {
+  eager: true,
+});
+// Look parts up by file name so the key doesn't depend on this file's location.
+const file = (name: string) => {
+  const entry = Object.entries(partFiles).find(([path]) => path.endsWith(`/${name}.png`));
+  if (!entry) throw new Error(`Missing elephant part ${name}.png; run npm run assets:hero`);
+  return entry[1].default;
+};
+
+// Elephant layers: responsive srcsets. The elephant's on-screen width follows
+// the scene layout in Hero.astro (height % × aspect), so each layer's `sizes`
+// is that width scaled by the layer's share of the canvas.
+const EL_WIDTH = {
+  desktop: `calc((100vh - 4.5rem) * ${(0.5 * manifest.aspect).toFixed(3)})`,
+  tablet: `${(0.54 * 0.5625 * manifest.aspect * 100).toFixed(1)}vw`,
+  phone: `${(0.56 * 0.75 * manifest.aspect * 100).toFixed(1)}vw`,
+};
+const sizesFor = (share: number) =>
+  `(min-width: 64rem) calc(${EL_WIDTH.desktop} * ${share}), (min-width: 40rem) calc(${EL_WIDTH.tablet} * ${share}), calc(${EL_WIDTH.phone} * ${share})`;
+const responsive = async (src: ImageMetadata, share: number) => {
+  const widths = [0.3, 0.55, 1].map((f) => Math.max(16, Math.round(src.width * f)));
+  const images = await Promise.all(
+    widths.map((width) => getImage({ src, width, format: 'webp', quality: 82 })),
+  );
+  return {
+    src: images[1].src,
+    srcset: images.map((img, i) => `${img.src} ${widths[i]}w`).join(', '),
+    sizes: sizesFor(share),
+  };
+};
+
+const baseImg = await responsive(base, 1);
+const parts = await Promise.all(
+  manifest.parts.map(async (p) => ({ ...p, img: await responsive(file(p.name), p.width / 100) })),
+);
+// Per-leg gait: rotation about the hip plus a backward slide during the
+// stance, sized so each planted foot stays fixed on the ground while the body
+// travels (verify with scripts/hero/check-gait.mjs). Short leg
+// pieces need more slide because rotation alone barely moves their feet.
+const GAIT: Record<string, { swing: number; slide: number }> = {
+  'leg-far-front': { swing: 8, slide: 0 },
+  'leg-near-front': { swing: 8, slide: 0 },
+  'leg-near-back': { swing: 8, slide: 7 },
+  'leg-far-back': { swing: 6, slide: 36 },
+};
+const legs = parts.filter((p) => p.group);
+const legStyle = (p: (typeof parts)[number]) =>
+  `${partStyle(p)};--swing:${GAIT[p.name].swing}deg;--slide:${GAIT[p.name].slide}%`;
+const behind = parts.filter((p) => !p.group); // trunk, tail, umbrella (under the base)
+const partStyle = (p: (typeof parts)[number]) =>
+  `left:${p.left}%;top:${p.top}%;width:${p.width}%;height:${p.height}%;transform-origin:${p.originX}% ${p.originY}%`;
+
+const { css: backgroundCss } = await heroBackgrounds();
+
+// A few twinkling stars for the night sky (positions as % of the scene).
+const STARS = [
+  [8, 9, 0],
+  [17, 22, 1.2],
+  [27, 6, 2.1],
+  [41, 15, 0.6],
+  [58, 7, 1.7],
+  [66, 19, 2.6],
+  [74, 5, 0.9],
+  [83, 14, 1.9],
+  [92, 8, 0.3],
+  [96, 24, 2.4],
+];
+---
+
+<style is:inline set:html={backgroundCss}></style>
+
+<div class="savari" data-savari>
+  <div
+    class="savari__scene"
+    role="img"
+    aria-label="Illustration: the Mysore Palace with crowds gathered in front, as a ceremonial Dasara elephant in a golden caparison walks past, carrying a mahout and the golden howdah of Goddess Chamundeshwari beneath a red ceremonial umbrella."
+  >
+    <div class="sv-palace" aria-hidden="true"></div>
+    <div class="sv-glow night-only" aria-hidden="true"></div>
+    <div class="sv-road" aria-hidden="true"></div>
+
+    <div class="sv-stars night-only" aria-hidden="true">
+      {STARS.map(([x, y, d]) => (
+        <span style={`left:${x}%;top:${y}%;animation-delay:-${d}s`} />
+      ))}
+    </div>
+
+    <div class="sv-birds day-only" aria-hidden="true">
+      {[0, 1, 2].map((i) => (
+        <svg class={`sv-bird sv-bird--${i}`} viewBox="0 0 40 16" focusable="false">
+          <path d="M2 8q9-8 18 2 9-10 18-2" />
+        </svg>
+      ))}
+    </div>
+
+    <div class="sv-procession" aria-hidden="true">
+      <div class="elephant" style={`aspect-ratio:${manifest.aspect}`}>
+        <span class="elephant__shadow" style={`top:${manifest.groundY - 3}%`}></span>
+        {legs.map((p) => (
+          <img
+            class:list={['el-part', 'el-leg', `el-leg--${p.group}`]}
+            src={p.img.src}
+            srcset={p.img.srcset}
+            sizes={p.img.sizes}
+            alt=""
+            style={legStyle(p)}
+            decoding="async"
+          />
+        ))}
+        <div class="el-body">
+          {behind.map((p) => (
+            <img
+              class:list={['el-part', `el-${p.name}`]}
+              src={p.img.src}
+              srcset={p.img.srcset}
+              sizes={p.img.sizes}
+              alt=""
+              style={partStyle(p)}
+              decoding="async"
+            />
+          ))}
+          <img
+            class="el-part el-base"
+            src={baseImg.src}
+            srcset={baseImg.srcset}
+            sizes={baseImg.sizes}
+            alt=""
+            decoding="async"
+          />
+          <span
+            class="el-lamp night-only"
+            style={`left:${manifest.lamp.x}%;top:${manifest.lamp.y}%`}
+            aria-hidden="true"
+          ></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Pause all scene animation while it is off-screen or the tab is hidden.
+  const root = document.querySelector<HTMLElement>('[data-savari]');
+  if (root) {
+    let onScreen = true;
+    const update = () => root.classList.toggle('is-paused', !onScreen || document.hidden);
+    new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      update();
+    }).observe(root);
+    document.addEventListener('visibilitychange', update);
+  }
+</script>
+
+<style is:global>
+  .savari,
+  .savari__scene {
+    position: absolute;
+    inset: 0;
+  }
+
+  .savari__scene {
+    container-type: size;
+    overflow: hidden;
+    background: var(--hero-sky);
+  }
+
+  /* Slight depth of field: the palace sits a little out of focus behind the
+     procession. Overscanned so the blur never softens the frame edges. */
+  .sv-palace {
+    position: absolute;
+    inset: -10px;
+    background-size: var(--palace-size, cover);
+    /* sit the artwork (and its crowd) on the far edge of the procession path */
+    background-position: center bottom calc(var(--road-h, 8cqh) + 10px);
+    background-repeat: no-repeat;
+    filter: blur(var(--palace-blur, 1.5px)) saturate(0.96);
+  }
+
+  /* The procession route: a paved path in front of the crowd, so the
+     elephant has ground under its feet. */
+  .sv-road {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--road-h, 8cqh);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 58px, var(--road-joint) 58px 60px),
+      linear-gradient(to bottom, var(--road-edge) 0 3px, var(--road-top) 3px, var(--road-bottom));
+  }
+
+  /* kerb shadow where the path meets the crowd */
+  .sv-road::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 40%;
+    background: linear-gradient(to bottom, var(--road-shade), transparent);
+  }
+
+  .savari {
+    --road-top: light-dark(#d6a07a, #2a2140);
+    --road-bottom: light-dark(#bf8460, #17122a);
+    --road-edge: light-dark(#f2cfae, rgb(255 196 110 / 0.45));
+    --road-joint: light-dark(rgb(120 70 40 / 0.12), rgb(255 200 120 / 0.05));
+    --road-shade: light-dark(rgb(90 50 25 / 0.22), rgb(0 0 0 / 0.45));
+  }
+
+  /* Night: a slow, soft swell of the palace lights. */
+  .sv-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      48% 38% at 50% 58%,
+      rgb(255 196 92 / 0.22),
+      rgb(255 170 60 / 0.06) 55%,
+      transparent 75%
+    );
+    mix-blend-mode: screen;
+    animation: sv-glow 7s ease-in-out infinite alternate;
+  }
+
+  .sv-stars span {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #fff6dc;
+    box-shadow: 0 0 6px 1px rgb(255 240 200 / 0.7);
+    animation: sv-twinkle 3.2s ease-in-out infinite alternate;
+  }
+
+  /* Day: a few birds drifting high over the palace. */
+  .sv-bird {
+    position: absolute;
+    width: 22px;
+    fill: none;
+    stroke: #3a4a5c;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    opacity: 0.55;
+    animation:
+      sv-fly 70s linear infinite,
+      sv-flap 0.9s ease-in-out infinite alternate;
+  }
+
+  .sv-bird--0 {
+    top: 14%;
+    animation-delay: -12s, 0s;
+  }
+
+  .sv-bird--1 {
+    top: 19%;
+    width: 16px;
+    animation-delay:
+      -16s,
+      -0.3s;
+  }
+
+  .sv-bird--2 {
+    top: 10%;
+    width: 14px;
+    animation-delay:
+      -48s,
+      -0.6s;
+  }
+
+  /* ---------- Procession ---------- */
+
+  .sv-procession {
+    position: absolute;
+    left: 0;
+    bottom: var(--el-bottom, 1.2cqh);
+    height: var(--el-height, 47%);
+    transform: translateX(var(--el-rest, 58cqw));
+    animation: sv-walk var(--el-cross, 75s) linear infinite;
+  }
+
+  .elephant {
+    position: relative;
+    height: 100%;
+    /* The artwork faces left; mirror it so the procession walks left to right. */
+    transform: scaleX(-1);
+  }
+
+  .el-part {
+    position: absolute;
+    display: block;
+    max-width: none;
+  }
+
+  .el-base {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .el-body {
+    position: absolute;
+    inset: 0;
+    animation: el-bob 0.95s ease-in-out infinite;
+  }
+
+  .elephant__shadow {
+    position: absolute;
+    left: 6%;
+    width: 92%;
+    height: 7%;
+    border-radius: 50%;
+    background: radial-gradient(
+      closest-side,
+      rgb(20 16 30 / 0.42),
+      rgb(20 16 30 / 0.18) 60%,
+      transparent
+    );
+    animation: el-shadow 0.95s ease-in-out infinite;
+  }
+
+  /* One stride = 1.9s; legs on the same diagonal move together. Each leg is
+     planted for half the cycle, sweeping back exactly as fast as the body moves
+     forward (--el-cross is tuned per breakpoint so feet don't skate), then
+     swings forward, lifted, for the other half. */
+  .el-leg {
+    animation: el-step 1.9s linear infinite;
+  }
+
+  .el-leg--b {
+    animation-delay: -0.95s;
+  }
+
+  .el-trunk {
+    animation: el-trunk 1.9s ease-in-out infinite alternate;
+  }
+
+  .el-tail {
+    animation: el-tail 0.95s ease-in-out infinite alternate;
+  }
+
+  .el-umbrella {
+    animation: el-umbrella 1.9s ease-in-out infinite alternate;
+  }
+
+  /* Night: a small lamp glowing inside the howdah. Screen-blended so it
+     lights the gold pavilion rather than painting over it. */
+  .el-lamp {
+    position: absolute;
+    width: 30%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgb(255 244 210 / 0.95) 0 2.5%,
+      rgb(255 205 110 / 0.6) 8%,
+      rgb(255 175 70 / 0.24) 26%,
+      rgb(255 160 60 / 0.08) 42%,
+      transparent 62%
+    );
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: el-lamp 2.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes el-lamp {
+    0% {
+      opacity: 0.8;
+      transform: scale(0.95);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+    70% {
+      opacity: 0.88;
+      transform: scale(0.98);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  /* Night: soften the elephant into the palace's warm light. */
+  :root[data-theme='dark'] .el-part {
+    filter: brightness(0.82) saturate(0.92);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .el-part {
+      filter: brightness(0.82) saturate(0.92);
+    }
+  }
+
+  @keyframes sv-walk {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100cqw);
+    }
+  }
+
+  /* Art coordinates face left: rotate(+) and translateX(-) move a foot
+     forward. 0–50% planted (sweeping back), 50–100% swinging forward, lifted. */
+  @keyframes el-step {
+    0% {
+      transform: translateX(calc(var(--slide) * -1)) rotate(var(--swing));
+    }
+    50% {
+      transform: translateX(var(--slide)) rotate(calc(var(--swing) * -1));
+    }
+    66% {
+      transform: translateX(calc(var(--slide) * 0.4)) translateY(-3%)
+        rotate(calc(var(--swing) * -0.25));
+    }
+    84% {
+      transform: translateX(calc(var(--slide) * -0.6)) translateY(-1.6%)
+        rotate(calc(var(--swing) * 0.6));
+    }
+    100% {
+      transform: translateX(calc(var(--slide) * -1)) rotate(var(--swing));
+    }
+  }
+
+  @keyframes el-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.7%);
+    }
+  }
+
+  @keyframes el-shadow {
+    0%,
+    100% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scaleX(0.97);
+      opacity: 0.85;
+    }
+  }
+
+  @keyframes el-trunk {
+    from {
+      transform: rotate(-3deg);
+    }
+    to {
+      transform: rotate(4deg);
+    }
+  }
+
+  @keyframes el-tail {
+    from {
+      transform: rotate(-7deg);
+    }
+    to {
+      transform: rotate(7deg);
+    }
+  }
+
+  @keyframes el-umbrella {
+    from {
+      transform: rotate(-1.4deg);
+    }
+    to {
+      transform: rotate(1.4deg);
+    }
+  }
+
+  @keyframes sv-glow {
+    from {
+      opacity: 0.55;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes sv-twinkle {
+    from {
+      opacity: 0.25;
+      transform: scale(0.7);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes sv-fly {
+    from {
+      transform: translateX(-5cqw);
+    }
+    to {
+      transform: translateX(105cqw);
+    }
+  }
+
+  @keyframes sv-flap {
+    from {
+      scale: 1 1;
+    }
+    to {
+      scale: 1 0.55;
+    }
+  }
+
+  .savari.is-paused,
+  .savari.is-paused * {
+    animation-play-state: paused !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .savari *,
+    .savari *::before {
+      animation: none !important;
+    }
+
+    .sv-birds {
+      display: none;
+    }
+  }
+</style>

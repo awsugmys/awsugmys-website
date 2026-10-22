@@ -1,0 +1,165 @@
+---
+// AWS User Group Mysuru follows the AWS Code of Conduct. The policy text below
+// is reproduced verbatim from https://aws.amazon.com/codeofconduct/ — update it
+// from the source (and the "Last Updated" date) if AWS revises it.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+
+const SOURCE = 'https://aws.amazon.com/codeofconduct/';
+---
+
+<BaseLayout
+  title="Code of Conduct"
+  description="AWS User Group Mysuru follows the AWS Code of Conduct at all of its meetups, workshops and online spaces."
+>
+  <header class="page-hero container">
+    <span class="eyebrow">Community</span>
+    <h1>Code of Conduct</h1>
+    <p>
+      {SITE.name} follows the{' '}
+      <a href={SOURCE} rel="noopener">
+        AWS Code of Conduct
+      </a>{' '}
+      at all of our meetups, workshops and online spaces.
+    </p>
+  </header>
+
+  <div class="container">
+    <article class="prose coc" aria-labelledby="coc-title">
+      <h2 id="coc-title">AWS Code of Conduct</h2>
+      <p class="muted">
+        <strong>Last Updated: June 4, 2026</strong>
+      </p>
+
+      <h3>Importance</h3>
+      <p>
+        We firmly believe in the value and importance of an environment where all AWS community
+        members feel welcome and safe. This Code of Conduct explains the behavior we expect from AWS
+        community members interacting at AWS events and programs, and across AWS blogs, online
+        forums, and social media platforms (collectively, AWS Programs). The purpose of AWS Programs
+        is to foster technical and professional education and encourage community discussion.
+      </p>
+
+      <h3>Behavior</h3>
+      <ol>
+        <li>
+          You will behave in a way that facilitates a safe and supportive environment for all AWS
+          Program participants.
+        </li>
+        <li>
+          You will not engage in disruptive speech or behavior or otherwise interfere with other
+          individuals' participation in AWS Program.
+        </li>
+        <li>You will not interfere with the operation of AWS Programs.</li>
+        <li>
+          You will provide accurate and truthful information during registration, check-in, or login
+          for any AWS Program.
+        </li>
+        <li>
+          You will only use the AWS Program credentials (e.g., event badges, login information to
+          programs or communities) that are provided to you. You will not transfer, lend, or share
+          your AWS Program credentials with anyone.
+        </li>
+        <li>
+          You will not attempt to receive benefits that you are not entitled to in relation to any
+          AWS Program.
+        </li>
+        <li>
+          You will not engage in any form of harassing, offensive, discriminatory, or threatening
+          speech or behavior, including but not limited to relating to race, gender, gender identity
+          and expression, national origin, religion, disability, marital status, age, sexual
+          orientation, military or veteran status, or other protected category.
+        </li>
+        <li>
+          Unless you are a registered AWS Event Sponsor, you will not use any AWS Program to market,
+          promote, advertise, solicit, or distribute materials regarding your own products,
+          services, or offerings, or those of any third party, without AWS's prior written consent.
+        </li>
+        <li>
+          You will comply with the instructions of AWS Program staff, including event and program
+          staff and AWS blog, online forum, and social media platform moderators.
+        </li>
+        <li>
+          You will comply with all applicable laws and any AWS Program specific requirements
+          (including all health and safety requirements).
+        </li>
+      </ol>
+
+      <h3>Scope</h3>
+      <p>
+        We expect all AWS community members (including but not limited to attendees, vendors,
+        sponsors, speakers, volunteers, moderators, and AWS employees) to uphold the principles of
+        this Code of Conduct. This Code of Conduct covers the main AWS Program and all related AWS
+        Programs (e.g., main events along with all related events or activities, social or
+        otherwise). AWS employees must continue to abide by all company policies at all times.
+      </p>
+
+      <h3>Consequences</h3>
+      <p>If we believe you breached this Code of Conduct, we may do any of the following:</p>
+      <ul>
+        <li>
+          Require you to leave or stop participating in an AWS Program that you are currently
+          participating in;
+        </li>
+        <li>Prohibit you from attending or participating in future AWS Programs; or</li>
+        <li>
+          Remove any content you submitted, posted, or otherwise made available within an AWS
+          Program in violation of this Code of Conduct.
+        </li>
+      </ul>
+      <p>
+        If we require you to leave an AWS event, you will not be eligible to receive a refund of any
+        fees paid to us related to the event. All determinations are at our sole discretion. We will
+        involve law enforcement if we deem appropriate.
+      </p>
+
+      <h3>Contact Us</h3>
+      <p>
+        If you witness or are subjected to inappropriate behavior at any AWS Program, please
+        promptly contact AWS at{' '}
+        <a href="mailto:aws-events-security-concerns@amazon.com">
+          aws-events-security-concerns@amazon.com
+        </a>
+        .
+      </p>
+    </article>
+
+    <aside class="coc-note">
+      <p>
+        At {SITE.name} events you can also speak to any organiser, or email{' '}
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      </p>
+      <p>
+        Source:{' '}
+        <a href={SOURCE} rel="noopener">
+          aws.amazon.com/codeofconduct
+        </a>
+      </p>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .coc {
+    max-width: 46rem;
+  }
+
+  .coc h3 {
+    margin-top: 1.8em;
+  }
+
+  .coc ol li {
+    padding-left: 0.25em;
+  }
+
+  .coc-note {
+    max-width: 46rem;
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    background: var(--c-bg-alt);
+    color: var(--c-text-muted);
+    font-size: var(--step--1);
+  }
+</style>

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "meetup",
+    "label": "Meetup",
+    "url": "https://www.meetup.com/awsugmys/",
+    "icon": "meetup",
+    "blurb": "RSVP for meetups, workshops and online sessions.",
+    "order": 1
+  },
+  {
+    "id": "luma",
+    "label": "Luma",
+    "url": "https://luma.com/awsugmys",
+    "icon": "luma",
+    "blurb": "Event registrations and the community calendar.",
+    "order": 2
+  },
+  {
+    "id": "linkedin",
+    "label": "LinkedIn",
+    "url": "https://www.linkedin.com/company/awsugmys",
+    "icon": "linkedin",
+    "blurb": "Event announcements, recaps and community news.",
+    "order": 3
+  },
+  {
+    "id": "twitter",
+    "label": "Twitter / X",
+    "url": "https://www.twitter.com/awsugmys",
+    "icon": "x",
+    "blurb": "Quick updates from the community.",
+    "order": 4
+  },
+  {
+    "id": "facebook",
+    "label": "Facebook",
+    "url": "https://www.facebook.com/awsugmys/",
+    "icon": "facebook",
+    "blurb": "Photos and updates from our events.",
+    "order": 5
+  }
+]

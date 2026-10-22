@@ -1,0 +1,78 @@
+---
+// Page section with optional eyebrow/heading. `tone="alt"` gives a sandstone
+// band with scalloped edges.
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  intro?: string;
+  tone?: 'default' | 'alt';
+  align?: 'start' | 'center';
+  narrow?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  intro,
+  tone = 'default',
+  align = 'start',
+  narrow = false,
+  class: className,
+} = Astro.props;
+const headingId = title && id ? `${id}-title` : undefined;
+---
+
+<section
+  id={id}
+  class:list={['section', `section--${tone}`, className]}
+  aria-labelledby={headingId}
+>
+  <div class={narrow ? 'container--narrow' : 'container'}>
+    {(eyebrow || title || intro) && (
+      <header class:list={['section__header', `section__header--${align}`]}>
+        {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+        {title && <h2 id={headingId}>{title}</h2>}
+        {intro && <p class="section__intro">{intro}</p>}
+      </header>
+    )}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    position: relative;
+    padding-block: var(--space-7);
+  }
+
+  .section--alt {
+    background: var(--c-bg-alt);
+    border-block: 1px solid var(--c-border);
+  }
+
+  .section__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .section__header--center {
+    text-align: center;
+  }
+
+  .section__header h2 {
+    margin-top: var(--space-2);
+  }
+
+  .section__intro {
+    max-width: 42rem;
+    margin-top: var(--space-3);
+    color: var(--c-text-muted);
+    font-size: var(--step-1);
+  }
+
+  .section__header--center .section__intro {
+    margin-inline: auto;
+  }
+</style>

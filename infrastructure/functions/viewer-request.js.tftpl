@@ -1,0 +1,49 @@
+// CloudFront Function (cloudfront-js-2.0) run on every viewer request.
+// Rendered by Terraform: ${apex_domain} is replaced with the site's domain.
+//
+//   www.<domain>/path  -> 301 https://<domain>/path
+//   /about/            -> serves /about/index.html
+//   /about             -> 301 /about/   (the site's canonical URLs end with a slash)
+
+function querystring(request) {
+  var parts = [];
+  var qs = request.querystring;
+  for (var key in qs) {
+    var item = qs[key];
+    var values = item.multiValue ? item.multiValue : [item];
+    for (var i = 0; i < values.length; i++) {
+      parts.push(values[i].value === '' ? key : key + '=' + values[i].value);
+    }
+  }
+  return parts.length ? '?' + parts.join('&') : '';
+}
+
+function redirect(location) {
+  return {
+    statusCode: 301,
+    statusDescription: 'Moved Permanently',
+    headers: { location: { value: location } },
+  };
+}
+
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+  var host = request.headers.host ? request.headers.host.value : '';
+
+  if (host === 'www.${apex_domain}') {
+    return redirect('https://${apex_domain}' + uri + querystring(request));
+  }
+
+  if (uri.endsWith('/')) {
+    request.uri = uri + 'index.html';
+    return request;
+  }
+
+  var lastSegment = uri.split('/').pop();
+  if (lastSegment.indexOf('.') === -1) {
+    return redirect(uri + '/' + querystring(request));
+  }
+
+  return request;
+}

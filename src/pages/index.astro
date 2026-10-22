@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/hero/Hero.astro';
+import Section from '../components/ui/Section.astro';
+import CallToAction from '../components/ui/CallToAction.astro';
+import EventCard from '../components/cards/EventCard.astro';
+import EventComingSoon from '../components/cards/EventComingSoon.astro';
+import PostCard from '../components/cards/PostCard.astro';
+import Icon from '../components/ui/Icon.astro';
+import { getEvents, getPosts, eventSchema } from '../lib/content';
+import { SITE } from '../data/site';
+import { heroBackgrounds } from '../lib/hero-backgrounds';
+
+const { upcoming, past } = await getEvents();
+const next = upcoming[0];
+const latestPast = past[0];
+const posts = (await getPosts()).slice(0, 3);
+const { preload: heroPreload } = await heroBackgrounds();
+
+const PILLARS = [
+  {
+    title: 'Learn',
+    icon: 'book',
+    text: 'Knowledge about AWS services, best practices and emerging technologies.',
+  },
+  {
+    title: 'Network',
+    icon: 'network',
+    text: 'Connect with like-minded professionals and build lasting relationships.',
+  },
+  {
+    title: 'Grow',
+    icon: 'growth',
+    text: 'Help each other advance in our cloud journey through mentorship and collaboration.',
+  },
+] as const;
+---
+
+<BaseLayout jsonLd={next ? [eventSchema(next)] : []} heroPreload={heroPreload}>
+  <Hero />
+
+  <Section id="about" eyebrow="Who we are" title="A home for AWS builders in Mysuru">
+    <div class="about-grid">
+      <div class="stack about-copy">
+        <p>
+          <strong>{SITE.name}</strong> is a group of passionate Amazon Web Services developers,
+          solution architects, DevOps engineers, users, evangelists and partners who meet to share
+          knowledge and best practices, and to discuss AWS services and product announcements in
+          Mysuru.
+        </p>
+        <p>
+          All skill levels — including students who would like to learn about AWS — are welcome.
+          Let's join hands to make this tech community bigger and better!
+        </p>
+        <p>
+          <a href="/about/">
+            More about us <Icon name="arrow" size={16} class="inline-icon" />
+          </a>
+        </p>
+      </div>
+      <ul class="pillars">
+        {PILLARS.map((p) => (
+          <li class="card pillar">
+            <span class="pillar__icon">
+              <Icon name={p.icon} size={22} />
+            </span>
+            <div>
+              <h3>{p.title}</h3>
+              <p class="muted">{p.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section id="events" tone="alt" eyebrow="On the calendar" title="Next event">
+    <div class="events-grid">
+      {next ? <EventCard event={next} /> : <EventComingSoon />}
+      {latestPast && (
+        <div>
+          <h3 class="events-grid__label">Most recent</h3>
+          <EventCard event={latestPast} compact />
+        </div>
+      )}
+    </div>
+    <p class="section-more">
+      <a href="/events/">
+        All events <Icon name="arrow" size={16} class="inline-icon" />
+      </a>
+    </p>
+  </Section>
+
+  <Section id="blog" eyebrow="From the blog" title="Latest stories">
+    <div class="grid">
+      {posts.map((post) => (
+        <PostCard post={post} />
+      ))}
+    </div>
+    <p class="section-more">
+      <a href="/blog/">
+        All posts <Icon name="arrow" size={16} class="inline-icon" />
+      </a>
+    </p>
+  </Section>
+
+  <CallToAction />
+</BaseLayout>
+
+<style>
+  .about-grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  @media (min-width: 56rem) {
+    .about-grid {
+      grid-template-columns: 1.1fr 1fr;
+    }
+  }
+
+  .about-copy > p {
+    font-size: var(--step-1);
+  }
+
+  .pillars {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .pillar {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .pillar p {
+    margin-top: var(--space-1);
+  }
+
+  .pillar__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-arch);
+    color: var(--c-accent-text);
+    background: var(--c-bg-alt);
+  }
+
+  .pillar h3 {
+    font-size: 1.1rem;
+  }
+
+  .events-grid {
+    display: grid;
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  @media (min-width: 60rem) {
+    .events-grid {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+
+  .events-grid__label {
+    margin-bottom: var(--space-3);
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-text-muted);
+  }
+
+  .section-more {
+    margin-top: var(--space-5);
+    font-weight: 700;
+  }
+
+  :global(.inline-icon) {
+    display: inline;
+    vertical-align: -0.15em;
+  }
+</style>

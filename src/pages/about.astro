@@ -1,0 +1,175 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import TeamCard from '../components/cards/TeamCard.astro';
+import Icon from '../components/ui/Icon.astro';
+import { SITE } from '../data/site';
+
+const team = (await getCollection('team')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name),
+);
+
+const EXPECT = [
+  'Technical talks by industry experts',
+  'Hands-on workshops and demos',
+  'Networking opportunities',
+  'Q&A sessions with AWS professionals',
+  'Community-driven discussions',
+];
+---
+
+<BaseLayout
+  title="About us"
+  description="The story, mission and organising team of AWS User Group Mysuru — a community for everyone building on AWS in and around Mysuru."
+>
+  <header class="page-hero container">
+    <span class="eyebrow">About us</span>
+    <h1>Our story</h1>
+    <p>A home in Mysuru for everyone curious about building on the AWS cloud.</p>
+  </header>
+
+  <Section>
+    <div class="prose about-story">
+      <p>
+        <strong>{SITE.name}</strong> (awsugmys) is a group of passionate{' '}
+        <a href="https://aws.amazon.com" rel="noopener">
+          Amazon Web Services
+        </a>{' '}
+        developers, solution architects, DevOps engineers, users, evangelists and partners who meet
+        to share knowledge and best practices, and to discuss AWS technology, services and product
+        announcements in Mysuru.
+      </p>
+      <p>
+        All skill levels, including students who would like to learn about AWS, are welcome to help
+        accomplish our motto of <em>learning, sharing and networking</em>. Let's join hands to
+        empower this tech community to make it bigger and better!
+      </p>
+    </div>
+  </Section>
+
+  <Section id="mission" tone="alt" eyebrow="Our mission" title="Learn · Network · Grow">
+    <div class="mission-grid">
+      <ul class="mission-list">
+        <li>
+          <strong>Learn</strong> — share knowledge about AWS services, best practices and emerging
+          technologies.
+        </li>
+        <li>
+          <strong>Network</strong> — connect with like-minded professionals and build lasting
+          relationships.
+        </li>
+        <li>
+          <strong>Grow</strong> — help each other advance in our cloud journey through mentorship
+          and collaboration.
+        </li>
+      </ul>
+      <div class="card expect">
+        <h3>What to expect at our meetups</h3>
+        <ul>
+          {EXPECT.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <Section
+    id="team"
+    eyebrow="Leadership"
+    title="The organising team"
+    intro="The volunteers who plan meetups, find speakers and welcome new members."
+  >
+    <div class="team-grid">
+      {team.map((member) => (
+        <TeamCard member={member} />
+      ))}
+    </div>
+  </Section>
+
+  <section class="container contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Say hello</h2>
+    <p class="muted">
+      Questions, ideas or want to host a meetup at your campus or office? Drop us a line.
+    </p>
+    <div class="btn-row contact__ctas">
+      <a class="btn btn--primary" href={`mailto:${SITE.email}`}>
+        <Icon name="mail" />
+        {SITE.email}
+      </a>
+      <a class="btn btn--ghost" href={SITE.speakerFormUrl} rel="noopener" target="_blank">
+        <Icon name="mic" /> Want to deliver a talk?
+        <span class="visually-hidden">(opens in a new tab)</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-story {
+    max-width: 46rem;
+  }
+
+  .mission-grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  @media (min-width: 56rem) {
+    .mission-grid {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  .mission-list {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+    font-size: var(--step-1);
+  }
+
+  .mission-list li {
+    padding-left: var(--space-5);
+    border-left: 3px solid var(--c-accent);
+  }
+
+  .mission-list strong {
+    font-family: var(--font-sans);
+    color: var(--c-heading);
+  }
+
+  .expect {
+    padding: var(--space-5);
+  }
+
+  .expect ul {
+    margin-top: var(--space-3);
+    padding-left: 1.2em;
+  }
+
+  .expect li::marker {
+    color: var(--c-accent-text);
+  }
+
+  .team-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  }
+
+  .contact {
+    text-align: center;
+  }
+
+  .contact p {
+    margin-top: var(--space-3);
+  }
+
+  .contact__ctas {
+    justify-content: center;
+    margin-top: var(--space-5);
+  }
+</style>

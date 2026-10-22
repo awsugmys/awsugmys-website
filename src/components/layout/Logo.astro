@@ -1,0 +1,52 @@
+---
+// Official wordmark, swapped per theme (dark text by day, white text by night).
+import { Image } from 'astro:assets';
+import logoLight from '../../assets/logos/logo-light.png';
+import logoDark from '../../assets/logos/logo-dark.png';
+
+interface Props {
+  height?: number;
+  class?: string;
+}
+
+const { height = 44, class: className } = Astro.props;
+const width = Math.round((height * logoLight.width) / logoLight.height);
+const common = {
+  width,
+  height,
+  widths: [width, width * 2],
+  sizes: `${width}px`,
+  format: 'webp' as const,
+  loading: 'eager' as const,
+  alt: '',
+};
+---
+
+<span class:list={['logo', className]} style={`--logo-w:${width}px;--logo-h:${height}px`}>
+  <Image src={logoLight} {...common} class="logo__img logo__img--light" />
+  <Image src={logoDark} {...common} class="logo__img logo__img--dark" />
+  <span class="visually-hidden">AWS User Group Mysuru</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-grid;
+    width: var(--logo-w);
+    height: var(--logo-h);
+  }
+
+  .logo__img {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s;
+  }
+
+  .logo__img--light {
+    opacity: calc(1 - var(--night));
+  }
+
+  .logo__img--dark {
+    opacity: var(--night);
+  }
+</style>

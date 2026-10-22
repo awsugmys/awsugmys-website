@@ -1,0 +1,21 @@
+{
+  "title": "OpenClaw on AWS",
+  "date": "2026-07-25",
+  "startTime": "10:00",
+  "endTime": "13:30",
+  "format": "in-person",
+  "venue": {
+    "name": "VVCE",
+    "city": "Mysuru",
+    "address": "P.B. No.206, Kannada Sahithya Parishath Rd, III Stage, Gokulam, Mysuru, Karnataka 570017"
+  },
+  "speakers": [
+    {
+      "name": "Yeshwanth L M",
+      "title": "Solutions Engineer, AWS Community Builder, Lead of AWS UG Mysuru",
+      "url": "https://www.linkedin.com/in/yeshwanth-l-m/"
+    }
+  ],
+  "description": "A hands-on deep dive into deploying OpenClaw on AWS: evaluating architectural paths by scale, budget and operational overhead, from rapid development on Amazon Lightsail to custom enterprise control on Amazon EC2, Amazon Bedrock AgentCore and Amazon EKS, followed by a hands-on Lightsail workshop.",
+  "registrationUrl": "https://www.meetup.com/awsugmys/events/315501194/"
+}

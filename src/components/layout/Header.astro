@@ -1,0 +1,216 @@
+---
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import Icon from '../ui/Icon.astro';
+import { NAV } from '../../data/site';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__brand" aria-label="AWS User Group Mysuru home">
+      <Logo height={56} />
+    </a>
+
+    <nav class="site-nav" aria-label="Main">
+      <button
+        class="site-nav__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav-list"
+        data-nav-toggle
+      >
+        <span class="site-nav__icon-open">
+          <Icon name="menu" size={22} />
+        </span>
+        <span class="site-nav__icon-close">
+          <Icon name="close" size={22} />
+        </span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <ul id="site-nav-list" class="site-nav__list">
+        {NAV.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <ThemeToggle />
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const list = document.getElementById('site-nav-list');
+
+  const setOpen = (open: boolean) => {
+    toggle?.setAttribute('aria-expanded', String(open));
+    list?.toggleAttribute('data-open', open);
+  };
+
+  toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+  matchMedia('(min-width: 60rem)').addEventListener('change', () => setOpen(false));
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--c-header-bg);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 4.5rem;
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    margin-right: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  .site-nav__list {
+    display: flex;
+    gap: var(--space-1);
+    padding: 0;
+    list-style: none;
+  }
+
+  /* One indicator for both states: a bar under the link that slides in on
+     hover/focus (neutral) and stays, in orange, on the current page. */
+  .site-nav__list a {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.8rem;
+    color: var(--c-text);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .site-nav__list a::after {
+    content: '';
+    position: absolute;
+    left: 0.8rem;
+    right: 0.8rem;
+    bottom: 0.15rem;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--c-border);
+    transform: scaleX(0);
+    transition:
+      transform 0.2s var(--ease-out),
+      background-color 0.2s;
+  }
+
+  .site-nav__list a:hover,
+  .site-nav__list a:focus-visible,
+  .site-nav__list a[aria-current='page'] {
+    color: var(--c-heading);
+  }
+
+  .site-nav__list a:hover::after,
+  .site-nav__list a:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .site-nav__list a[aria-current='page']::after {
+    background: var(--c-accent);
+    transform: scaleX(1);
+  }
+
+  .site-nav__toggle {
+    display: none;
+  }
+
+  /* Mobile: collapse into a panel. Without JS the list simply wraps. */
+  @media (max-width: 59.99rem) {
+    :global(.js) .site-nav__toggle {
+      display: grid;
+      place-items: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border: 1px solid var(--c-border);
+      border-radius: 999px;
+      background: var(--c-surface);
+      color: var(--c-text);
+      cursor: pointer;
+    }
+
+    .site-nav__toggle[aria-expanded='true'] .site-nav__icon-open,
+    .site-nav__toggle[aria-expanded='false'] .site-nav__icon-close {
+      display: none;
+    }
+
+    :global(.js) .site-nav__list {
+      position: absolute;
+      inset: 100% 0 auto;
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      padding: var(--space-3) 1.25rem var(--space-5);
+      background: var(--c-bg);
+      border-bottom: 1px solid var(--c-border);
+      box-shadow: var(--shadow-card);
+    }
+
+    :global(.js) .site-nav__list[data-open] {
+      display: flex;
+    }
+
+    :global(.js) .site-nav__list a {
+      padding: 0.85rem 1rem;
+      font-size: var(--step-1);
+    }
+
+    /* in the menu panel the same indicator becomes a bar on the left edge */
+    :global(.js) .site-nav__list a::after {
+      left: 0;
+      right: auto;
+      top: 0.6rem;
+      bottom: 0.6rem;
+      width: 3px;
+      height: auto;
+      transform: scaleY(0);
+    }
+
+    :global(.js) .site-nav__list a:hover::after,
+    :global(.js) .site-nav__list a:focus-visible::after,
+    :global(.js) .site-nav__list a[aria-current='page']::after {
+      transform: scaleY(1);
+    }
+
+    :global(html:not(.js)) .site-header__inner {
+      flex-wrap: wrap;
+      padding-block: var(--space-2);
+    }
+
+    :global(html:not(.js)) .site-nav {
+      order: 3;
+      width: 100%;
+    }
+
+    :global(html:not(.js)) .site-nav__list {
+      flex-wrap: wrap;
+    }
+  }
+</style>
