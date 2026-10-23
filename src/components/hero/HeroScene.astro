@@ -296,6 +296,10 @@ const STARS = [
     height: var(--el-height, 47%);
     transform: translateX(var(--el-rest, 58cqw));
     animation: sv-walk var(--el-cross, 75s) linear infinite;
+    /* Start the loop partway through so the elephant is already on-screen
+       (left of centre) on first paint instead of walking in from the edge.
+       The loop stays seamless; this only shifts where it begins. */
+    animation-delay: calc(var(--el-cross, 75s) * -0.3);
   }
 
   .elephant {
@@ -540,6 +544,12 @@ const STARS = [
     .savari *,
     .savari *::before {
       animation: none !important;
+    }
+
+    /* With the walk disabled, park the elephant on-screen, left of centre,
+       to match the animated scene's starting position. */
+    .sv-procession {
+      transform: translateX(20cqw) !important;
     }
 
     .sv-birds {
