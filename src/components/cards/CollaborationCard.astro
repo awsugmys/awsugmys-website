@@ -21,14 +21,25 @@ const TYPE_LABEL = {
   community: 'Community',
 } as const;
 
-// Prefer a full date ("11 July 2026"); fall back to the year alone.
-const dateLabel = data.date
-  ? new Date(`${data.date}T00:00:00+05:30`).toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    })
-  : data.year?.toString();
+// Prefer a full date ("11 July 2026"); render a range for multi-day events
+// ("30–31 October 2026"); fall back to the year alone.
+const fmt = (iso: string, opts: Intl.DateTimeFormatOptions) =>
+  new Date(`${iso}T00:00:00+05:30`).toLocaleDateString('en-IN', opts);
+
+let dateLabel: string | undefined;
+if (data.date && data.endDate) {
+  const start = new Date(`${data.date}T00:00:00+05:30`);
+  const end = new Date(`${data.endDate}T00:00:00+05:30`);
+  const sameMonth =
+    start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth();
+  dateLabel = sameMonth
+    ? `${start.getDate()}–${fmt(data.endDate, { day: 'numeric', month: 'long', year: 'numeric' })}`
+    : `${fmt(data.date, { day: 'numeric', month: 'long' })} – ${fmt(data.endDate, { day: 'numeric', month: 'long', year: 'numeric' })}`;
+} else if (data.date) {
+  dateLabel = fmt(data.date, { day: 'numeric', month: 'long', year: 'numeric' });
+} else if (data.year) {
+  dateLabel = data.year.toString();
+}
 
 const meta = [dateLabel, data.location].filter(Boolean).join(' · ');
 

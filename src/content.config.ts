@@ -103,6 +103,8 @@ const collaborations = defineCollection({
       type: z.enum(['event', 'organization', 'community']).default('event'),
       // Full date (YYYY-MM-DD) for events; falls back to `year` when absent.
       date: isoDate.optional(),
+      // Optional end date for multi-day events (renders as a range).
+      endDate: isoDate.optional(),
       year: z.number().int().optional(),
       location: z.string().optional(),
       url: z.url().optional(),

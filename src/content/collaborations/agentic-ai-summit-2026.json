@@ -1,9 +1,10 @@
 {
-  "name": "Agentic AI Summit 2026",
+  "name": "IEEE AgenticAI Summit 2026",
   "type": "event",
-  "year": 2026,
-  "location": "Bengaluru",
-  "logo": "../../assets/collaborations/agentic-ai-summit-2026.png",
-  "blurb": "Collaborated on the summit bringing together builders working on agentic AI.",
+  "date": "2026-10-30",
+  "endDate": "2026-10-31",
+  "location": "IISc Bangalore",
+  "logo": "../../assets/collaborations/agentic-ai-summit-2026-banner.png",
+  "blurb": "Yeshwanth L M, Lead, AWS UG Mysuru talked on Building a Production Ready AI Agent with AWS AgentCore and Strands.",
   "order": 2
 }
