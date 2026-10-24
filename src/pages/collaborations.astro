@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import CollaborationCard from '../components/cards/CollaborationCard.astro';
+
+const collaborations = (await getCollection('collaborations')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name),
+);
+---
+
+<BaseLayout
+  title="Collaborations"
+  description="Events, institutions and communities AWS User Group Mysuru has partnered and collaborated with."
+>
+  <header class="page-hero container">
+    <span class="eyebrow">Collaborations</span>
+    <h1>Who we've worked with</h1>
+    <p>
+      The events, institutions and communities we have partnered with as we grow the cloud community
+      in and around Mysuru.
+    </p>
+  </header>
+
+  <Section>
+    <div class="collab-grid">
+      {collaborations.map((collaboration) => (
+        <CollaborationCard collaboration={collaboration} />
+      ))}
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .collab-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  }
+</style>

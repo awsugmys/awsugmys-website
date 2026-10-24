@@ -3,15 +3,10 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/ui/Section.astro';
 import TeamCard from '../components/cards/TeamCard.astro';
-import CollaborationCard from '../components/cards/CollaborationCard.astro';
 import Icon from '../components/ui/Icon.astro';
 import { SITE } from '../data/site';
 
 const team = (await getCollection('team')).sort(
-  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name),
-);
-
-const collaborations = (await getCollection('collaborations')).sort(
   (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name),
 );
 
@@ -80,27 +75,11 @@ const EXPECT = [
     </div>
   </Section>
 
-  {collaborations.length > 0 && (
-    <Section
-      id="collaborations"
-      eyebrow="Collaborations"
-      title="Who we've worked with"
-      intro="Events, institutions and communities we have partnered with along the way."
-    >
-      <div class="collab-grid">
-        {collaborations.map((collaboration) => (
-          <CollaborationCard collaboration={collaboration} />
-        ))}
-      </div>
-    </Section>
-  )}
-
   <Section
     id="team"
     eyebrow="Leadership"
     title="The organising team"
     intro="The volunteers who plan meetups, find speakers and welcome new members."
-    tone="alt"
   >
     <div class="team-grid">
       {team.map((member) => (
@@ -179,12 +158,6 @@ const EXPECT = [
     display: grid;
     gap: var(--space-4);
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
-  }
-
-  .collab-grid {
-    display: grid;
-    gap: var(--space-4);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
   }
 
   .contact {
