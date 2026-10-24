@@ -68,7 +68,7 @@ const fonts = amazonEmber();
       rel="alternate"
       type="application/rss+xml"
       title="AWS User Group Mysuru blog"
-      href="/rss.xml"
+      href={new URL('rss.xml', Astro.site).href}
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <JsonLd data={[org, ...jsonLd]} />
