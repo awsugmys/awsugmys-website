@@ -50,6 +50,12 @@ const events = defineCollection({
     blogPost: z.string().optional(),
     // Marks illustrative entries so they are clearly labelled on the site.
     placeholder: z.boolean().default(false),
+    // Set by scripts/import-meetup-events.mjs on auto-imported events: the
+    // Meetup iCal UID (for de-duplication). Hand-authored events omit it.
+    meetupId: z.string().optional(),
+    // Snapshot of the feed-owned values the importer last wrote, so it can
+    // detect hand edits and avoid overwriting them. Managed by the script.
+    _meetupSync: z.record(z.string(), z.unknown()).optional(),
   }),
 });
 

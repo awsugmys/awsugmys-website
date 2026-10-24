@@ -21,7 +21,8 @@
     "check:hero-alignment": "node scripts/hero/check-alignment.mjs",
     "check:hero-gait": "node scripts/hero/check-gait.mjs",
     "screenshots": "node scripts/take-screenshots.mjs",
-    "check:cdn-routing": "node infrastructure/functions/viewer-request.test.mjs"
+    "check:cdn-routing": "node infrastructure/functions/viewer-request.test.mjs",
+    "import:meetup": "node scripts/import-meetup-events.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.0",

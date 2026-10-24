@@ -103,6 +103,16 @@
       "default": false,
       "type": "boolean"
     },
+    "meetupId": {
+      "type": "string"
+    },
+    "_meetupSync": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
+    },
     "$schema": {
       "type": "string"
     }

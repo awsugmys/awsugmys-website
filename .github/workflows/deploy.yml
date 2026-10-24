@@ -8,10 +8,11 @@ on:
     - cron: "30 18 * * *"
   workflow_dispatch:
 
-# OIDC needs id-token: write; contents: read to check out the code.
+# OIDC needs id-token: write; contents: write lets the daily run commit newly
+# imported Meetup events back to the repo.
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -36,6 +37,29 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Pull the latest events from the Meetup iCal feed into the events
+      # collection. Only the daily cron and manual runs import; a plain push
+      # deploys exactly what was pushed.
+      - name: Import Meetup events
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: npm run import:meetup
+
+      # Commit any new/updated events back to main. [skip ci] stops this push
+      # from starting a second deploy; the current run still builds and ships
+      # the imported content below.
+      - name: Commit imported events
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          if [ -n "$(git status --porcelain src/content/events)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/content/events
+            git commit -m "Import Meetup events [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "No event changes to commit."
+          fi
 
       - name: Build
         run: npm run build
