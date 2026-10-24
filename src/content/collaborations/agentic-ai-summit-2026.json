@@ -3,6 +3,7 @@
   "type": "event",
   "year": 2026,
   "location": "Bengaluru",
+  "logo": "../../assets/collaborations/agentic-ai-summit-2026.png",
   "blurb": "Collaborated on the summit bringing together builders working on agentic AI.",
   "order": 2
 }

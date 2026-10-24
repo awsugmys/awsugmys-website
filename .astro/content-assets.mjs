@@ -1,4 +1,5 @@
 
-
-export default new Map([]);
+import __ASTRO_IMAGE_IMPORT_0 from "../../assets/collaborations/agentic-ai-summit-2026.png?astroContentImageFlag=&importer=src%2Fcontent%2Fcollaborations%2Fagentic-ai-summit-2026.json";
+import __ASTRO_IMAGE_IMPORT_1 from "../../assets/collaborations/aws-community-day-bengaluru-2026.png?astroContentImageFlag=&importer=src%2Fcontent%2Fcollaborations%2Faws-community-day-bengaluru-2026.json";
+export default new Map([["../../assets/collaborations/agentic-ai-summit-2026.png?astroContentImageFlag=&importer=src%2Fcontent%2Fcollaborations%2Fagentic-ai-summit-2026.json", __ASTRO_IMAGE_IMPORT_0], ["../../assets/collaborations/aws-community-day-bengaluru-2026.png?astroContentImageFlag=&importer=src%2Fcontent%2Fcollaborations%2Faws-community-day-bengaluru-2026.json", __ASTRO_IMAGE_IMPORT_1]]);
 		

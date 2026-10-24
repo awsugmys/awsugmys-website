@@ -31,69 +31,104 @@ const dateLabel = data.date
   : data.year?.toString();
 
 const meta = [dateLabel, data.location].filter(Boolean).join(' · ');
+
+// Wide images (e.g. event banners) span the top of the card; squarish logos
+// sit in a small tile beside the text.
+const isBanner = data.logo ? data.logo.width / data.logo.height >= 1.6 : false;
 ---
 
-<article class:list={['card collab-card', { 'card--interactive': data.url }]}>
-  {data.logo ? (
-    <span class="collab-card__logo">
-      <Image src={data.logo} alt={`${data.name} logo`} width={88} height={88} />
-    </span>
-  ) : (
-    <span class="collab-card__icon" aria-hidden="true">
-      <Icon name={TYPE_ICON[data.type]} size={22} />
-    </span>
+<article class:list={['card collab-card', { 'card--interactive': data.url, 'collab-card--banner': isBanner }]}>
+  {isBanner && data.logo && (
+    <Image
+      class="collab-card__banner"
+      src={data.logo}
+      alt={`${data.name} banner`}
+      widths={[480, 768]}
+      sizes="(min-width: 48rem) 24rem, 100vw"
+    />
   )}
-  <div class="collab-card__body">
-    <span class="collab-card__kind">{TYPE_LABEL[data.type]}</span>
-    <h3 class="collab-card__name">
-      {data.url ? (
-        <a class="card-link" href={data.url} rel="noopener" target="_blank">
-          {data.name}
-          <span class="visually-hidden"> (opens in a new tab)</span>
-        </a>
+  <div class="collab-card__row">
+    {!isBanner &&
+      (data.logo ? (
+        <span class="collab-card__logo">
+          <Image src={data.logo} alt={`${data.name} logo`} width={88} height={88} />
+        </span>
       ) : (
-        data.name
-      )}
-    </h3>
-    {meta && <p class="collab-card__meta">{meta}</p>}
-    {data.blurb && <p class="collab-card__blurb">{data.blurb}</p>}
+        <span class="collab-card__icon" aria-hidden="true">
+          <Icon name={TYPE_ICON[data.type]} size={22} />
+        </span>
+      ))}
+    <div class="collab-card__body">
+      <span class="collab-card__kind">{TYPE_LABEL[data.type]}</span>
+      <h3 class="collab-card__name">
+        {data.url ? (
+          <a class="card-link" href={data.url} rel="noopener" target="_blank">
+            {data.name}
+            <span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        ) : (
+          data.name
+        )}
+      </h3>
+      {meta && <p class="collab-card__meta">{meta}</p>}
+      {data.blurb && <p class="collab-card__blurb">{data.blurb}</p>}
+    </div>
+    {data.url && (
+      <span class="collab-card__link" aria-hidden="true">
+        <Icon name="external" size={16} />
+      </span>
+    )}
   </div>
-  {data.url && (
-    <span class="collab-card__link" aria-hidden="true">
-      <Icon name="external" size={16} />
-    </span>
-  )}
 </article>
 
 <style>
   .collab-card {
+    padding: var(--space-4);
+  }
+
+  .collab-card--banner {
+    padding-top: 0;
+    overflow: hidden;
+  }
+
+  .collab-card__banner {
+    display: block;
+    width: calc(100% + 2 * var(--space-4));
+    margin: 0 calc(-1 * var(--space-4)) var(--space-4);
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+  }
+
+  .collab-card__row {
     display: grid;
     grid-template-columns: auto 1fr auto;
     gap: var(--space-3);
     align-items: start;
-    padding: var(--space-4);
   }
 
-  .collab-card__icon {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    color: var(--c-accent-text);
-    background: var(--c-bg-alt);
-    border: 1px solid var(--c-border);
+  .collab-card--banner .collab-card__row {
+    grid-template-columns: 1fr auto;
   }
 
+  .collab-card__icon,
   .collab-card__logo {
     display: grid;
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
+    border: 1px solid var(--c-border);
+  }
+
+  .collab-card__icon {
+    border-radius: 50%;
+    color: var(--c-accent-text);
+    background: var(--c-bg-alt);
+  }
+
+  .collab-card__logo {
     overflow: hidden;
     border-radius: 12px;
     background: #ffffff;
-    border: 1px solid var(--c-border);
   }
 
   .collab-card__logo :global(img) {
