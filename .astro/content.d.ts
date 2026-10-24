@@ -144,6 +144,15 @@ declare module 'astro:content' {
   filePath?: string;
   digest?: string | number;
 }>;
+"collaborations": Record<string, {
+  id: string;
+  body?: string;
+  collection: "collaborations";
+  data: InferEntrySchema<"collaborations">;
+  rendered?: RenderedContent;
+  filePath?: string;
+  digest?: string | number;
+}>;
 "events": Record<string, {
   id: string;
   body?: string;

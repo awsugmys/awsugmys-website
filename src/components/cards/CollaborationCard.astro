@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  collaboration: CollectionEntry<'collaborations'>;
+}
+
+const { data } = Astro.props.collaboration;
+
+const TYPE_ICON = {
+  event: 'calendar',
+  organization: 'network',
+  community: 'users',
+} as const;
+
+const TYPE_LABEL = {
+  event: 'Event',
+  organization: 'Organisation',
+  community: 'Community',
+} as const;
+
+// Prefer a full date ("11 July 2026"); fall back to the year alone.
+const dateLabel = data.date
+  ? new Date(`${data.date}T00:00:00+05:30`).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  : data.year?.toString();
+
+const meta = [dateLabel, data.location].filter(Boolean).join(' · ');
+---
+
+<article class:list={['card collab-card', { 'card--interactive': data.url }]}>
+  {data.logo ? (
+    <span class="collab-card__logo">
+      <Image src={data.logo} alt={`${data.name} logo`} width={88} height={88} />
+    </span>
+  ) : (
+    <span class="collab-card__icon" aria-hidden="true">
+      <Icon name={TYPE_ICON[data.type]} size={22} />
+    </span>
+  )}
+  <div class="collab-card__body">
+    <span class="collab-card__kind">{TYPE_LABEL[data.type]}</span>
+    <h3 class="collab-card__name">
+      {data.url ? (
+        <a class="card-link" href={data.url} rel="noopener" target="_blank">
+          {data.name}
+          <span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      ) : (
+        data.name
+      )}
+    </h3>
+    {meta && <p class="collab-card__meta">{meta}</p>}
+    {data.blurb && <p class="collab-card__blurb">{data.blurb}</p>}
+  </div>
+  {data.url && (
+    <span class="collab-card__link" aria-hidden="true">
+      <Icon name="external" size={16} />
+    </span>
+  )}
+</article>
+
+<style>
+  .collab-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--space-3);
+    align-items: start;
+    padding: var(--space-4);
+  }
+
+  .collab-card__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    color: var(--c-accent-text);
+    background: var(--c-bg-alt);
+    border: 1px solid var(--c-border);
+  }
+
+  .collab-card__logo {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid var(--c-border);
+  }
+
+  .collab-card__logo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .collab-card__kind {
+    color: var(--c-text-muted);
+    font-size: var(--step--2);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .collab-card__name {
+    margin-top: var(--space-1);
+    font-size: 1.05rem;
+  }
+
+  .collab-card__meta {
+    margin-top: var(--space-1);
+    color: var(--c-text-muted);
+    font-size: var(--step--1);
+  }
+
+  .collab-card__blurb {
+    margin-top: var(--space-2);
+    font-size: 0.95rem;
+  }
+
+  .collab-card__link {
+    color: var(--c-link);
+  }
+</style>

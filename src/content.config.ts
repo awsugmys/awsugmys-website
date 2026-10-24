@@ -92,4 +92,26 @@ const studentGroups = defineCollection({
   }),
 });
 
-export const collections = { blog, events, team, links, studentGroups };
+// Organisations and events we have partnered or collaborated with.
+const collaborations = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/collaborations' }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      // event = a dated event we co-hosted or took part in; organization = an
+      // institution or company; community = a peer user group or community.
+      type: z.enum(['event', 'organization', 'community']).default('event'),
+      // Full date (YYYY-MM-DD) for events; falls back to `year` when absent.
+      date: isoDate.optional(),
+      year: z.number().int().optional(),
+      location: z.string().optional(),
+      url: z.url().optional(),
+      // Logo in src/assets/collaborations/ (processed at build time).
+      logo: image().optional(),
+      // One line on what we did together.
+      blurb: z.string().optional(),
+      order: z.number().default(99),
+    }),
+});
+
+export const collections = { blog, events, team, links, studentGroups, collaborations };
